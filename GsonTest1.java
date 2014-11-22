@@ -5,13 +5,15 @@ import java.util.List;
 
 import com.google.gson.Gson;
 /**
- * Kurzbeweis der Funktionalität der JSON-Bibliothek Gson (Hersteller: Google)
+ * Kurzbeweis der FunktionalitÃ¤t der JSON-Bibliothek Gson (Hersteller: Google)
  * Download unter: http://search.maven.org/#artifactdetails|com.google.code.gson|gson|2.3.1|jar
  * Lizenz der Bibliothek: Open Source (Apache License 2.0)
  * Objekt wird zu JSON serialisiert, ausgegeben, deserialiert und erneut ausgegeben
  * @author Sebastian Kopp
  *
  */
+ 
+ // Achja: Kompilieren dÃ¼rfts ihr selber ;)
 public class GsonTest1 {
 	public static void main(String[] args) {
 		Gson gs = new Gson();
@@ -25,7 +27,7 @@ public class GsonTest1 {
 	}
 }
 /**
- * De Implementierung des Interface Serializable scheint hier gar nicht nötig zu sein...
+ * De Implementierung des Interface Serializable scheint hier gar nicht nÃ¶tig zu sein...
  * @author Sebastian
  */
 class FooObj{
@@ -63,11 +65,11 @@ class BarObj{
 	public BarObj(){
 		f = 420815;
 		h = "Irgendwo im nirchendwo";
-		l = Arrays.asList("Dies", "ist", "ein", "Beispiel", "für", "eine", "Liste");
+		l = Arrays.asList("Dies", "ist", "ein", "Beispiel", "fÃ¼r", "eine", "Liste");
 	}
 	private String listToString(List<String> lx){
 		StringBuilder sb = new StringBuilder("L:<<");
-		lx.forEach(sb::append);	// Bsp. f. Java-8-Methodenreferenzen, dafür wird der String ohne Trennzeichen erstellt
+		lx.forEach(sb::append);	// Bsp. f. Java-8-Methodenreferenzen, dafÃ¼r wird der String ohne Trennzeichen erstellt
 		return sb.toString() + ">>";
 	}
 	@Override
