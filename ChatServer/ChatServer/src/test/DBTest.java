@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import db.AbstractDBAdapter;
 import db.CUDAdapter;
 import db.RAdapter;
 

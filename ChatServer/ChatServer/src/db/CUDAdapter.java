@@ -1,18 +1,11 @@
 package db;
 
-import java.io.UnsupportedEncodingException;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import security.PWHasher;
-import model.UserAddSuccess;
 
-public class CUDAdapter {
+public class CUDAdapter extends AbstractDBAdapter{
 	
-	private DBController dbc;
-	private Connection con;
 	private static final String ADD_USER = "Insert into user (nickname, password) values (?,?);";
 	private PWHasher pwh;
 //	private static final String CHK_UNAME_EXIST = "Select count (*) from user where nickname = ?;";
@@ -29,7 +22,7 @@ public class CUDAdapter {
 	 * Hinzufügen eines Nutzers nach Nutzernamen und Passwort
 	 * Die Überprüfung, ob der Username bereits existiert und ob das PW stark genug ist, muss stattgefunden haben!
 	 * Das PW jedoch soll noch nicht gehashed sein!
-	 * @return
+	 * @return ob Nutzereintrag geglückt ist
 	 */
 	public boolean addUser(String desiredNickname, String pw){
 		try {
@@ -42,9 +35,10 @@ public class CUDAdapter {
 		} catch (Exception e) {
 			// TODO Rollbackbehandlung schreiben
 			e.printStackTrace();
-			
+			doRollback();
 			return false;
 		}
 		
 	}
+	
 }

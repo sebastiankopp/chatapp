@@ -46,4 +46,5 @@ class DBController {
 		Class.forName(DRIVER_CLASS);
 		return DriverManager.getConnection(DB_CON_URL, DB_USR, DB_PW);
 	}
+	
 }
