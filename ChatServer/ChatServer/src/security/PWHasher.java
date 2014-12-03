@@ -12,12 +12,12 @@ import java.security.NoSuchAlgorithmException;
 public class PWHasher {
 	private MessageDigest md;
 	private static final String ALGORITHM = "SHA-256";
-	private static final String PW_ENCODING = "UTF-8";
+	public static final String STD_ENCODING = "UTF-8";
 	public PWHasher() throws NoSuchAlgorithmException{
 		md = MessageDigest.getInstance(ALGORITHM);
 	}
 	public String createHash(String text) throws UnsupportedEncodingException{
-		md.update(text.getBytes(PW_ENCODING));
+		md.update(text.getBytes(STD_ENCODING));
 		byte[] hashval = md.digest();
 		StringBuilder sb = new StringBuilder();
 		for (Byte b: hashval){
