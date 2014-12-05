@@ -16,7 +16,7 @@ public class MainHttpServer {
         server.start();
 	}
 	public String getUrl(){
-		return String.format("http://%s:%d%s", server.getAddress().getAddress().getHostAddress(), server.getAddress().getPort(), CONTEXT);
+		return String.format("http://[%s]:%d%s", server.getAddress().getAddress().getHostAddress(), server.getAddress().getPort(), CONTEXT);
 	}
 	public void finish(){
 		server.stop(PORT);

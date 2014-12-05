@@ -35,6 +35,7 @@ public class AdminShell {
 		} else if (line[0].equalsIgnoreCase("adduser")){
 			
 		} else if (line[0].equalsIgnoreCase("deluser")) {
+			
 		} else {
 			System.err.println("Falsche Eingabe. Bitte noch einmal");
 			promptManual();
@@ -77,5 +78,4 @@ public class AdminShell {
 			}
 		}
 	}
-
 }

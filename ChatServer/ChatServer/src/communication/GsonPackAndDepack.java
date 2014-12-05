@@ -1,5 +1,6 @@
 package communication;
 
+import model.ChatMessage;
 import model.UserAddSuccess;
 
 import com.google.gson.Gson;
@@ -10,15 +11,15 @@ public class GsonPackAndDepack {
 	public GsonPackAndDepack(){
 		gs = new Gson();
 	}
-	
-	// TODO typesafe methods
-	public UserAddSuccess makeUserAddSuccFromJson(String json){
-		return gs.fromJson(json, UserAddSuccess.class);
+	@Deprecated
+	public <T> String toJson(T obj){
+		return gs.toJson(obj, obj.getClass());
 	}
-	public String jsonFromUserAddSuccess(UserAddSuccess uas){
-		return gs.toJson(uas, UserAddSuccess.class);
+	public <T> String toJson(T obj, Class<T> _class){
+		return gs.toJson(obj, _class);
 	}
-	
-	
+	public <T> T fromJson(String json, Class<T> _class){
+		return gs.fromJson(json, _class);
+	}
 }
 

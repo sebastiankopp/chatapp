@@ -51,5 +51,7 @@ public class User {
 	public void setRealname(String realname) {
 		this.realname = realname;
 	}
-	
+	public String toString(){
+		return String.format("User Nr %d: \"%s\"; %s", userid, nickname, realname);
+	}
 }
