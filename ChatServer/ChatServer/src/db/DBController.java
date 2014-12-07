@@ -7,7 +7,7 @@ import java.sql.SQLException;
 class DBController {
 	private static final String CREATE_USR_TABLE = "Create table if not exists user (" + 
 		"userid int not null auto_increment primary key, nickname varchar(50) not null unique," + 
-			"passwd_hash varchar(255) not null);";
+			"passwd_hash varchar(255) not null, realname varchar(100));";
 	private static final String CREATE_CONV_TABLE = "Create table if not exists conversation (" + 
 			"conv_id int not null auto_increment primary key);";
 	private static final String CREATE_UC_TABLE = "Create table if not exists usr_conv(" +
@@ -31,20 +31,26 @@ class DBController {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ClassNotFoundException cnfe){
-			System.err.println("Fatal error. Driver class not found!");
-			System.exit(1);
 		}
 		
+	}
+	public Connection getConnection() throws SQLException {
+		return getConnection(AbstractDBAdapter.DEFAULT_ROLLBACK_TRIES);
 	}
 	public static DBController getInstance(){
 		if (instance == null)
 			instance = new DBController();
 		return instance;
 	}
-	public Connection getConnection() throws SQLException, ClassNotFoundException{
-		Class.forName(DRIVER_CLASS);
-		return DriverManager.getConnection(DB_CON_URL, DB_USR, DB_PW);
+	private Connection getConnection(int tries) throws SQLException{
+		if (tries > 0){
+			try {
+				Class.forName(DRIVER_CLASS);
+				return DriverManager.getConnection(DB_CON_URL, DB_USR, DB_PW);
+			} catch (ClassNotFoundException | SQLException e) {
+				e.printStackTrace();
+				return getConnection(tries-1);
+			}
+		} else throw new SQLException("Connection could not be established");
 	}
-	
 }

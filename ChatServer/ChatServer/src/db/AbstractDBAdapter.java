@@ -1,10 +1,11 @@
 package db;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public abstract class AbstractDBAdapter {
 
-	private static final int DEFAULT_ROLLBACK_TRIES = 5;
+	static final int DEFAULT_ROLLBACK_TRIES = 5;
 	protected DBController dbc;
 	protected Connection con;
 	
@@ -19,6 +20,11 @@ public abstract class AbstractDBAdapter {
 			if (tries > 0)
 				doRollback(tries-1);
 			else System.err.println("FATAL Error: Rollback finally failed!");
+		}
+	}
+	protected final void checkCon() throws SQLException{
+		if (con == null || con.isClosed()){
+			con = dbc.getConnection();
 		}
 	}
 }

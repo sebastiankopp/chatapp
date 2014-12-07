@@ -13,13 +13,13 @@ import model.User;
 import org.junit.Before;
 import org.junit.Test;
 
-import communication.GsonPackAndDepack;
+import communication.GsonControl;
 
 public class GsonTest {
-	private GsonPackAndDepack gspdp;
+	private GsonControl gspdp;
 	@Before
 	public void setUp(){
-		gspdp = new GsonPackAndDepack();
+		gspdp = new GsonControl();
 	}
 	@Test 
 	public void test1(){

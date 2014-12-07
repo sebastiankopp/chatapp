@@ -33,12 +33,10 @@ public class CUDAdapter extends AbstractDBAdapter{
 			con.commit();
 			return true;
 		} catch (Exception e) {
-			// TODO Rollbackbehandlung schreiben
 			e.printStackTrace();
 			doRollback();
 			return false;
 		}
-		
 	}
 	
 }

@@ -1,14 +1,11 @@
 package communication;
 
-import model.ChatMessage;
-import model.UserAddSuccess;
-
 import com.google.gson.Gson;
 
-public class GsonPackAndDepack {
+public class GsonControl {
 	
 	private Gson gs;
-	public GsonPackAndDepack(){
+	public GsonControl(){
 		gs = new Gson();
 	}
 	@Deprecated
