@@ -1,10 +1,10 @@
 package model;
 
-public class LoginSuccess {
+public class LoginResponse {
 	private boolean success;
 	private String token;
 	private String errstr;
-	public LoginSuccess(boolean success, String arg1){
+	public LoginResponse(boolean success, String arg1){
 		this.success = success;
 		if (success){
 			token = arg1;
