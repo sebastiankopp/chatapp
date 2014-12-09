@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 import servercore.ServerCenter;
 
@@ -16,18 +17,21 @@ public class Acceptor implements HttpHandler{
 	
 	@Override
 	public void handle(HttpExchange httx) throws IOException {
+		System.err.println("Handling started");
 		BufferedReader brx = new BufferedReader(new InputStreamReader(httx.getRequestBody()));
 		String line;
 		String reqBody = "";
 		while ((line = brx.readLine()) != null){
 			reqBody += line;
 		}
+		
 		Headers headsx = httx.getResponseHeaders();	
 		OutputStream os = httx.getResponseBody();
+		String [] parts = httx.getRequestURI().toString().split("\\/");
+		String paramx = parts[parts.length-1];
 		String response;
-		
 		try {
-			response = sc.processJson(reqBody);
+			response = sc.processJson(reqBody, paramx);
 			httx.sendResponseHeaders(200, response.length());
 			headsx.add("Content-Type", "application/json; charset=utf-8");
 		} catch (Exception e) {

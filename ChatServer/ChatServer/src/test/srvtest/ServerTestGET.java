@@ -1,31 +1,16 @@
-package test;
+package test.srvtest;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import communication.MainHttpServer;
 import static org.junit.Assert.*;
-public class ServerTest {
-	private MainHttpServer mhs = null;
-	@Before
-	public void pullUp() {
-		try {
-			mhs = new MainHttpServer();
-		} catch (IOException e) {
-			e.printStackTrace();
-			fail();
-		}
-	}
-	@Test
+public class ServerTestGET extends AbstractServerTest {
+	
+
 	public void test(){
 		try {
-			String urlix = mhs.getUrl();
+			String urlix = "http://127.0.0.1:" + mhs.getPort() + mhs.getResourcePath() + "/foo";
 			URL obj = new URL(urlix);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 			con.setRequestMethod("GET"); 
@@ -44,20 +29,19 @@ public class ServerTest {
  
 			//print result
 			System.out.println(response.toString());
+			assertTrue(response.toString().length() > 0);
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail();
+			fail(e.getMessage());
 		}
-		try {
-			Thread.sleep(50000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(50);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
-	@org.junit.After
-	public void tearDown(){
-		if (mhs != null)
-			mhs.finish();
-	}
+	
+	
 }

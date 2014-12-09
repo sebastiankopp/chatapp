@@ -18,7 +18,14 @@ public class MainHttpServer {
 	public String getUrl(){
 		return String.format("http://[%s]:%d%s", server.getAddress().getAddress().getHostAddress(), server.getAddress().getPort(), CONTEXT);
 	}
+	public String getResourcePath(){
+		return CONTEXT;
+	}
 	public void finish(){
 		server.stop(PORT);
+		System.err.println("Server stopped");
+	}
+	public int getPort(){
+		return PORT;
 	}
 }
