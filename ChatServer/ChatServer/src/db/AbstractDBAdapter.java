@@ -3,12 +3,23 @@ package db;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import security.PWHasher;
+
 public abstract class AbstractDBAdapter {
 
 	static final int DEFAULT_ROLLBACK_TRIES = 5;
 	protected DBController dbc;
 	protected Connection con;
-	
+	protected PWHasher pwh;
+	public AbstractDBAdapter(){
+		dbc = DBController.getInstance();
+		try {
+			con = dbc.getConnection();
+			pwh = new PWHasher();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	protected final void doRollback(){
 		if (con != null)
 			doRollback(DEFAULT_ROLLBACK_TRIES);

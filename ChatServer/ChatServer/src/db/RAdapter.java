@@ -6,21 +6,18 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import model.ChatMessage;
 import model.Conversation;
 import model.User;
 
 public class RAdapter extends AbstractDBAdapter {
 	private static final String GET_ALL_CONVS = "Select uc.conv_id from user u, usr_conv uc where u.userid = uc.userid and nickname = ?;";
 	private static final String GET_USR_BY_CONV = "Select u.userid, u.realname, u.nickname from user, usr_conv where u.userid = uc.userid and uc.conv_id = ?;";
+	private static final String GET_PW_BY_USR = "Select passwd_hash from user where nickname = ?";
 //	private static final String ADD_USER = "Insert into user (nickname, password) values (?,?);";
 	public  RAdapter() {
 		// TODO Auto-generated constructor stub
-		dbc = DBController.getInstance();
-		try {
-			con = dbc.getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} 
+		super();
 	}
 	public List<Conversation> getConvsByUsr(String nickn) throws SQLException{
 		PreparedStatement pst = con.prepareStatement(GET_ALL_CONVS);
@@ -40,5 +37,23 @@ public class RAdapter extends AbstractDBAdapter {
 			rc.add(ccx);
 		}
 		return rc;
+	}
+	public List<ChatMessage> getMessages(Conversation conv){
+		return null;
+		
+	}
+	public boolean validateUser(String nickname, String pw){
+		try {
+			PreparedStatement pst = con.prepareStatement(GET_PW_BY_USR);
+			pst.setString(1, nickname);
+			ResultSet rs = pst.executeQuery();
+			if (rs.next()){
+				if (pwh.createHash(pw).equals(rs.getString(1))) return true;
+			}
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

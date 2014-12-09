@@ -15,7 +15,7 @@ class DBController {
 	private static final String CREATE_MSG_TABLE = "Create table if not exists message (" + 
 			"msg_id long not null auto_increment primary key, msg_text clob, msg_dt timestamp not null, " + 
 			"conv_id int not null, absender_id int not null);";
-	private static final String DRIVER_CLASS = "org.h2.driver";
+	private static final String DRIVER_CLASS = "org.h2.Driver";
 	private static final String DB_CON_URL = "jdbc:h2:./chatdb";
 	private static final String DB_USR = "sa";
 	private static final String DB_PW = "";
