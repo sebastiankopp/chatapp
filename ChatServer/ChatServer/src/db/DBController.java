@@ -9,7 +9,7 @@ class DBController {
 		"userid int not null auto_increment primary key, nickname varchar(50) not null unique," + 
 			"passwd_hash varchar(255) not null, realname varchar(100));";
 	private static final String CREATE_CONV_TABLE = "Create table if not exists conversation (" + 
-			"conv_id int not null auto_increment primary key);";
+			"conv_id int not null auto_increment primary key, conv_str varchar(100));";
 	private static final String CREATE_UC_TABLE = "Create table if not exists usr_conv(" +
 			"usr_conv_id long not null auto_increment primary key, userid int, conv_id int);";
 	private static final String CREATE_MSG_TABLE = "Create table if not exists message (" + 

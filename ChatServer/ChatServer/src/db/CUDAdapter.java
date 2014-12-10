@@ -1,18 +1,18 @@
 package db;
 
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 
 import model.ChatMessage;
 import model.User;
-import security.PWHasher;
 
 public class CUDAdapter extends AbstractDBAdapter{
-	
 	private static final String ADD_USER = "Insert into user (nickname, passwd_hash) values (?,?);";
 	private static final String DELETE_USER_MESSAGES = "Delete from message where absender_id = (select userid from user where nickname = ?);";
 	private static final String DELETE_USER = "Delete from user where nickname = ?;";
+	private static final String ADD_MESSAGE = "Insert into messages (msg_text,msg_dt,conv_id,absender_id) values (?,?,?,?);";
+	private static final String SET_NEW_PW = "Update user set passwd_hash = ? where userid = ?";
+	private static final String ADD_NEW_CONV = "Insert into conv (conv_str) values (?);";
 	//	private static final String CHK_UNAME_EXIST = "Select count (*) from user where nickname = ?;";
 	public CUDAdapter(){
 		super();
@@ -38,13 +38,38 @@ public class CUDAdapter extends AbstractDBAdapter{
 		}
 	}
 	public boolean addMessage(ChatMessage msg){
-		return false;
+		try{
+			PreparedStatement pst = con.prepareStatement(ADD_MESSAGE);
+			pst.setString(1, msg.getMessage());
+			pst.setObject(2, msg.getTstamp());	// sufficient acc to http://www.oracle.com/technetwork/articles/java/jf14-date-time-2125367.html
+			pst.setInt(3, msg.getConv().getConvId());
+			pst.setInt(4, msg.getFrom().getUserid());
+			pst.execute();
+			con.commit();
+			return true;
+		} catch(Exception sqle){
+			sqle.printStackTrace();
+			doRollback();
+			return false;
+		}
 	}
 	public boolean changePW(User u, String pw){
-		return false;
+		try{
+			PreparedStatement pst = con.prepareStatement(SET_NEW_PW);
+			pst.setString(1, pwh.createHash(pw));
+			pst.setInt(2, u.getUserid());
+			pst.execute();
+			con.commit();
+			return true;
+		} catch (Exception sqle ) {
+			sqle.printStackTrace();
+			doRollback();
+			return false;
+		}
+		
 	}
 	public boolean addConv(List<User> users){
-		return false;
+		return false;		// TODO finsih
 		
 	}
 	public boolean deleteUserByNickName(String uname){
@@ -57,7 +82,7 @@ public class CUDAdapter extends AbstractDBAdapter{
 			pst.executeUpdate();
 			con.commit();
 			return true;
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			doRollback();
