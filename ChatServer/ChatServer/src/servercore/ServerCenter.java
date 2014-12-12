@@ -13,6 +13,8 @@ import model.ChatMessage;
 import model.Conversation;
 import model.LoginRequest;
 import model.LoginResponse;
+import model.PWChangeRequest;
+import model.PWChangeSuccess;
 import model.RequestWrapper;
 import model.User;
 
@@ -43,17 +45,19 @@ public class ServerCenter {
 				switch (Integer.parseInt(param)){
 				// TODO Eigentliche Fälle hinschreiben
 				case MessageTypes.CHNG_PW:
-					
-					break;
+					PWChangeRequest pwc = gsc.fromJson(reqBody, PWChangeRequest.class);
+					tkn = pwc.getToken();
+					if(!validateToken(tkn)) return "";
+					SingleUserContext suc = actives.get(tkn);
+					PWChangeSuccess pws = suc.changePW(tkn, pwc.getOldPW(), pwc.getNewPW());
+					return gsc.toJson(pws, PWChangeSuccess.class);
 				case MessageTypes.CONV_ADDUSR:
 					
 					break;
 				case MessageTypes.CONV_LIST:
 					rw = gsc.fromJson(reqBody, RequestWrapper.class);	// Conversation-ID
 					tkn = rw.getToken();
-					if (!actives.containsKey(tkn)){
-						return "";
-					}
+					if (!validateToken(tkn))return "";
 					List<Conversation> convs = rad.getConvsByUsr(actives.get(tkn).getUser().getNickname());
 					return gsc.toJson(convs);
 				case MessageTypes.CREATE_CONV:
@@ -94,7 +98,6 @@ public class ServerCenter {
 				Arrays.stream(e.getStackTrace()).map(el -> el.toString() + "\n").forEach(rc::append);
 				return rc.toString();
 			}
-
 		}
 		return "";
 	}
@@ -113,6 +116,9 @@ public class ServerCenter {
 	protected void logoutUser(String token){
 		actives.get(token).logout();
 		actives.remove(token);
+	}
+	protected boolean validateToken(String tk){
+		return actives.containsKey(tk);
 	}
 	
 
