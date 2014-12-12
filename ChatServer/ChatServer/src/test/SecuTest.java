@@ -23,7 +23,7 @@ public class SecuTest {
 			if (pwh.createHash(in).length() != 64) fail("Falsche Hashlänge");
 			assertEquals(hash1, hash2);
 			System.out.println("Hash1: " + hash1 + "\nHash2: " + hash2);
-		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+		} catch (NoSuchAlgorithmException e) {
 			fail(e.getMessage());
 		}
 	}
@@ -38,7 +38,7 @@ public class SecuTest {
 			if (pwh.createHash(in).length() != 64) fail("Falsche Hashlänge");
 			assertNotEquals(hash1, hash2);
 			System.out.println("Hash1: " + hash1 + "\nHash2: " + hash2);
-		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+		} catch (NoSuchAlgorithmException e) {
 			fail(e.getMessage());
 		}
 	}

@@ -9,9 +9,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.UUID;
-
-import communication.GsonControl;
+import com.google.gson.Gson;
 
 import model.ChatMessage;
 import model.Conversation;
@@ -23,7 +21,7 @@ public class SimpleMessagingTest extends AbstractServerTest{
 	public void test() {
 		// TODO Auto-generated method stub
 		try{
-			GsonControl gsc = new GsonControl();
+			Gson gsc = new Gson();
 			String urlix = "http://127.0.0.1:" + mhs.getPort() + mhs.getResourcePath();
 			URL obj = new URL(urlix);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();

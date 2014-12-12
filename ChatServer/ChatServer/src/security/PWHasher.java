@@ -16,8 +16,12 @@ public class PWHasher {
 	public PWHasher() throws NoSuchAlgorithmException{
 		md = MessageDigest.getInstance(ALGORITHM);
 	}
-	public String createHash(String text) throws UnsupportedEncodingException{
-		md.update(text.getBytes(STD_ENCODING));
+	public String createHash(String text) {
+		try {
+			md.update(text.getBytes(STD_ENCODING));
+		} catch (UnsupportedEncodingException e) {
+			md.update(text.getBytes());
+		}
 		byte[] hashval = md.digest();
 		StringBuilder sb = new StringBuilder();
 		for (Byte b: hashval){

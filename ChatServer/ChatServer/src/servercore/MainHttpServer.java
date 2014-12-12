@@ -1,4 +1,4 @@
-package communication;
+package servercore;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

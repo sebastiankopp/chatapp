@@ -20,6 +20,12 @@ public class SingleUserContext {
 		cad = new CUDAdapter();
 		rad = new RAdapter();
 	}
+	public User getUser(){
+		return this.user;
+	}
+	public String getToken(){
+		return this.token;
+	}
 	public PWChangeSuccess changePW(String token, String oldpw, String newpw){
 		if (!token.equals(this.token))
 			return null;
@@ -47,5 +53,8 @@ public class SingleUserContext {
 	}
 	public List<ChatMessage> getMsgs(Conversation conv){
 		return null;
+	}
+	public void logout(){
+		token = "";
 	}
 }

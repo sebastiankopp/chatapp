@@ -14,6 +14,7 @@ public class RAdapter extends AbstractDBAdapter {
 	private static final String GET_ALL_CONVS = "Select uc.conv_id from user u, usr_conv uc where u.userid = uc.userid and nickname = ?;";
 	private static final String GET_USR_BY_CONV = "Select u.userid, u.realname, u.nickname from user, usr_conv where u.userid = uc.userid and uc.conv_id = ?;";
 	private static final String GET_PW_BY_USR = "Select passwd_hash from user where nickname = ?";
+	private static final String GET_USR_BY_NICKNAME = "Select userid, nickname, realname from user where nickname = ?;";
 //	private static final String ADD_USER = "Insert into user (nickname, password) values (?,?);";
 	public  RAdapter() {
 		// TODO Auto-generated constructor stub
@@ -38,7 +39,7 @@ public class RAdapter extends AbstractDBAdapter {
 		}
 		return rc;
 	}
-	public List<ChatMessage> getMessages(Conversation conv){
+	public List<ChatMessage> getMessages(int convid){
 		return null;
 		
 	}
@@ -55,5 +56,21 @@ public class RAdapter extends AbstractDBAdapter {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	public User getUserByNickname(String username) throws NullPointerException {
+		// TODO Auto-generated method stub
+		PreparedStatement pst;
+		try {
+			pst = con.prepareStatement(GET_USR_BY_NICKNAME);
+			pst.setString(1, username);
+			ResultSet rs = pst.executeQuery();
+			if (rs.next()){
+				return new User (rs.getInt(1), rs.getString(2), rs.getString(3));
+			} else throw new NullPointerException("User not found");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new NullPointerException(e.getMessage());
+		}
 	}
 }

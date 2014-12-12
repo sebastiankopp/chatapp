@@ -7,7 +7,7 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import communication.MainHttpServer;
+import servercore.MainHttpServer;
 
 public abstract class AbstractServerTest {
 	protected MainHttpServer mhs = null;

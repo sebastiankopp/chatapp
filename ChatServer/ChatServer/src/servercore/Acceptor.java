@@ -1,13 +1,9 @@
-package communication;
+package servercore;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.Arrays;
-
-import servercore.ServerCenter;
-
 import com.sun.net.httpserver.*;
 public class Acceptor implements HttpHandler{
 	private ServerCenter sc;
