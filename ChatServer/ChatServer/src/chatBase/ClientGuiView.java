@@ -35,16 +35,30 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 
-class GuiViewController {
+class ClientGuiView {
 
 	// Frame Main
 	JFrame frameMain;
+	ClientGuiActionListeners clientguiAL;
 	
 	// Chat
 	JTextArea memoVerlauf = new JTextArea();
 	JTextArea memoChat = new JTextArea();
 	JButton buttonSenden = new JButton("Senden");
-
+	Client client;
+	
+	// Config
+	JTextField editServerIP = new JTextField();
+	JTextField editServerPort = new JTextField();
+	JTextField editClientNickname = new JTextField();
+	
+	// Login
+	JButton buttonLogin = new JButton("Anmeldung am Server");
+	JButton buttonLogout = new JButton("Abmeldung vom Server");
+    boolean istVerbunden = false;
+	
+	// Kontakte
+	JList<String> listKontakte = new JList<String>();
 
 	// MenuBar
 	 JMenuBar createMenuBar() {
@@ -53,6 +67,8 @@ class GuiViewController {
 		menuBar.add(menuEinstellungen);
 		JMenuItem menuItemEinstellungenSichern = new JMenuItem("Sichern");
 		menuEinstellungen.add(menuItemEinstellungenSichern);
+		JMenuItem menuItemEinstellungenLaden = new JMenuItem("Laden");
+		menuEinstellungen.add(menuItemEinstellungenLaden);
 		return menuBar;
 	}
 	 
@@ -71,12 +87,14 @@ class GuiViewController {
 		 
 		 JPanel wrapPanel4Chat = new JPanel();
 		 wrapPanel4Chat.setLayout(new BoxLayout(wrapPanel4Chat, BoxLayout.X_AXIS));
-		 wrapPanel4Chat.add(memoChat);
+		 wrapPanel4Chat.add(new JScrollPane(memoChat));
 		 setFixSizeOfComponent(memoChat, 400, 100);
 		 wrapPanel4Chat.add(buttonSenden);
 		 setFixSizeOfComponent(buttonSenden,100,100);
+		 buttonSenden.addActionListener(clientguiAL.actionListenerButtonSenden);
 		 
-		 panel.add(memoVerlauf);
+		 panel.add(new JScrollPane(memoVerlauf));
+		 memoVerlauf.setEditable(false);
 		 setFixSizeOfComponent(memoVerlauf, 500, 300);
 		 panel.add(new JSeparator(SwingConstants.HORIZONTAL));
 		 panel.add(wrapPanel4Chat);
@@ -94,15 +112,10 @@ class GuiViewController {
 		 panelInner.setLayout(new BoxLayout(panelInner, BoxLayout.Y_AXIS));
 		 setFixSizeOfComponent(panelInner, 198, 398);
 		 
-		 JTextField editServerIP = new JTextField();
-		 JTextField editServerPort = new JTextField();
-		 JTextField editClientNickname = new JTextField();
-		 JButton buttonLogin = new JButton("Anmeldung am Server");
-		 JList<String> listKontakte = new JList<String>();
-		 
 		 JPanel panelEinstellungen = new JPanel();
 		 panelEinstellungen.setLayout(new BoxLayout(panelEinstellungen, BoxLayout.Y_AXIS));
-		 setFixSizeOfComponent(panelEinstellungen, 196, 100);
+		 setFixSizeOfComponent(panelEinstellungen, 196, 160);
+		 
 		 
 		 panelEinstellungen.add(new JLabel("Server IP:"));
 		 panelEinstellungen.add(editServerIP);
@@ -110,12 +123,22 @@ class GuiViewController {
 		 panelEinstellungen.add(editServerPort);
 		 panelEinstellungen.add(new JLabel("Client Nickname:"));
 		 panelEinstellungen.add(editClientNickname);
+		 panelEinstellungen.add(Box.createRigidArea(new Dimension(0,2))); //bisl Abstand
+		 panelEinstellungen.add(buttonLogin);
+		 buttonLogin.addActionListener(clientguiAL.actionListenerButtonLogin);
+		 setFixSizeOfComponent(buttonLogin, 194, 26);
+		 panelEinstellungen.add(Box.createRigidArea(new Dimension(0,2))); //bisl Abstand
+		 panelEinstellungen.add(buttonLogout);
+		 buttonLogout.addActionListener(clientguiAL.actionListenerButtonLogout);
+		 setFixSizeOfComponent(buttonLogout, 194, 26);
+		 buttonLogout.setEnabled(false);
+		 
 		 
 		 JPanel panelKontakte = new JPanel();
 		 panelKontakte.setLayout(new BoxLayout(panelKontakte, BoxLayout.Y_AXIS));
-		 setFixSizeOfComponent(panelKontakte, 196, 256);
+		 setFixSizeOfComponent(panelKontakte, 196, 196);
 		 panelKontakte.add(new JLabel("gerade online:"));
-		 panelKontakte.add(listKontakte);
+		 panelKontakte.add(new JScrollPane(listKontakte));
 		 
 		 panelInner.add(panelEinstellungen);
 		 panelInner.add(Box.createRigidArea(new Dimension(0,40))); //bisl Abstand
@@ -130,7 +153,13 @@ class GuiViewController {
 	 void createFrame() {
 		frameMain = new JFrame("Chat-App pre-alpha");
 		frameMain.setLayout(new BorderLayout());
+		
+		
 		frameMain.setResizable(false);
+		
+		setStandard();
+		
+		
 		// try {
 			//später: frameMain.setIconImage(ImageIO.read(getClass().getResource("./resources/nestIcon.png")));
 		// } catch (IOException e) {
@@ -151,14 +180,13 @@ class GuiViewController {
 		frameMain.add(createConfigPanel(), BorderLayout.WEST);
 		//frameMain.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.CENTER);
 		frameMain.add(createChatPanel(), BorderLayout.CENTER);
-		
-		memoVerlauf.setEditable(false);
 
 		frameMain.pack();
 	}
 	 
-	public GuiViewController() {
+	public ClientGuiView() {
 		super();
+		clientguiAL = new ClientGuiActionListeners(this);
 		createFrame();
 	}
 
@@ -171,10 +199,30 @@ class GuiViewController {
 		frameMain.dispose();
 	}
 	
-	// Control Actionlisterners
-	ActionListener actionListenerButtonSenden = new ActionListener() {
-		public void actionPerformed(ActionEvent e) {	
-		}
-	}; 
+	public void appendMemoVerlauf(String str) {
+		memoVerlauf.append(str);
+		memoVerlauf.setCaretPosition(memoVerlauf.getText().length() - 1);
+	}
+	
+	public void verbindungsfehler() {
+		buttonLogin.setEnabled(true);
+		buttonLogout.setEnabled(false);
+		setStandard();
+		editServerIP.setEditable(true); //sab
+		editServerPort.setEditable(true);	//sab
+		
+		//for (ActionListener al : buttonSenden.getActionListeners()){
+		//	buttonSenden.removeActionListener(al);
+		//}  //sab nicht nötig, über istverbunden geregelt
+		
+		istVerbunden = false;
+	}
+	
+	public void setStandard(){
+		// später durch autoload von einstellungen ersetzen (Feature 3)
+		editServerIP.setText("127.0.0.1");
+		editServerPort.setText("1500");
+		editClientNickname.setText("Unbekannt");
+	}
 
 }

@@ -15,7 +15,7 @@ public class Client  {
 	private Socket socket;
 
 	// if I use a GUI or not
-	private ClientGUI cg;
+	private ClientGuiView cg;
 	
 	// the server, the port and the username
 	private String server, username;
@@ -36,7 +36,7 @@ public class Client  {
 	 * Constructor call when used from a GUI
 	 * in console mode the ClienGUI parameter is null
 	 */
-	Client(String server, int port, String username, ClientGUI cg) {
+	Client(String server, int port, String username, ClientGuiView cg) {
 		this.server = server;
 		this.port = port;
 		this.username = username;
@@ -55,6 +55,7 @@ public class Client  {
 		// if it failed not much I can so
 		catch(Exception ec) {
 			display("Error connectiong to server:" + ec);
+			cg.verbindungsfehler();
 			return false;
 		}
 		
@@ -69,6 +70,7 @@ public class Client  {
 		}
 		catch (IOException eIO) {
 			display("Exception creating new Input/output Streams: " + eIO);
+			cg.verbindungsfehler();
 			return false;
 		}
 
@@ -83,6 +85,7 @@ public class Client  {
 		catch (IOException eIO) {
 			display("Exception doing login : " + eIO);
 			disconnect();
+			cg.verbindungsfehler();
 			return false;
 		}
 		// success we inform the caller that it worked
@@ -96,7 +99,7 @@ public class Client  {
 		if(cg == null)
 			System.out.println(msg);      // println in console mode
 		else
-			cg.append(msg + "\n");		// append to the ClientGUI JTextArea (or whatever)
+			cg.appendMemoVerlauf(msg + "\n");		// append to the ClientGUI JTextArea (or whatever)
 	}
 	
 	/*
@@ -130,8 +133,7 @@ public class Client  {
 		catch(Exception e) {} // not much else I can do
 		
 		// inform the GUI
-		if(cg != null)
-			cg.connectionFailed();
+		cg.verbindungsfehler();
 			
 	}
 	/*
@@ -232,13 +234,12 @@ public class Client  {
 						System.out.print("> ");
 					}
 					else {
-						cg.append(msg);
+						cg.appendMemoVerlauf(msg);
 					}
 				}
 				catch(IOException e) {
 					display("Server has close the connection: " + e);
-					if(cg != null) 
-						cg.connectionFailed();
+						cg.verbindungsfehler();
 					break;
 				}
 				// can't happen with a String object but need the catch anyhow

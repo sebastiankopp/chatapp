@@ -17,7 +17,7 @@ public class MainController {
 			e.printStackTrace();
 		}
 		// BEGIN MAIN
-		GuiViewController gui = new GuiViewController();
+		ClientGuiView gui = new ClientGuiView();
 		gui.setVisible(true);
 		
 		// END MAIN
