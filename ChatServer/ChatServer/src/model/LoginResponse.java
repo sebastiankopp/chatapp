@@ -4,6 +4,7 @@ public class LoginResponse {
 	private boolean success;
 	private String token;
 	private String errstr;
+	public LoginResponse(){}
 	public LoginResponse(boolean success, String arg1){
 		this.success = success;
 		if (success){
@@ -13,6 +14,9 @@ public class LoginResponse {
 			errstr = arg1;
 			token = null;
 		}
+	}
+	public void setErrstr(String errstr){
+		this.errstr = errstr;
 	}
 	/**
 	 * @return the errstr
@@ -26,10 +30,16 @@ public class LoginResponse {
 	public String getToken() {
 		return token;
 	}
+	public void setToken(String token) {
+		this.token = token;
+	}
 	/**
 	 * @return the success
 	 */
 	public boolean isSuccess() {
 		return success;
+	}
+	public void setSuccess(boolean success){
+		this.success = success;
 	}
 }

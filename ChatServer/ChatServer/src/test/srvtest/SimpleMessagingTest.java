@@ -26,7 +26,7 @@ public class SimpleMessagingTest extends AbstractServerTest{
 			URL obj = new URL(urlix);
 			HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 			User u1 = new User(1, "kA", "Irgendwer"), u2 = new User(2, "ano", "Ano Nymus");
-			ChatMessage cmessg = new ChatMessage("Servus", u1, new Conversation(815, Arrays.asList(u1, u2)));
+			ChatMessage cmessg = new ChatMessage("Servus", u1, new Conversation(815, Arrays.asList(u1, u2)), "ksjdf");
 			
 			con.setDoOutput(true);
 			con.setRequestMethod("POST"); 

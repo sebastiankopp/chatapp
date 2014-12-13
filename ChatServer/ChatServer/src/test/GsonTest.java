@@ -34,7 +34,7 @@ public class GsonTest {
 		long ctxx = 30 + Math.round(90*Math.random());
 		for (int i = 0; i < ctxx; i++)
 			msgtext.append(UUID.randomUUID().toString());
-		ChatMessage msg = new ChatMessage(msgtext.toString(), ux.get(0), cnv1);
+		ChatMessage msg = new ChatMessage(msgtext.toString(), ux.get(0), cnv1, "tokentoken");
 		String before = msg.toString();
 		System.out.println(before);
 		String json = gspdp.toJson(msg, ChatMessage.class);

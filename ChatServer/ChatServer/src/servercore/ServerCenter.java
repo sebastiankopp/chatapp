@@ -80,7 +80,11 @@ public class ServerCenter {
 					List<ChatMessage> l = rad.getMessages(rw.getRequest());
 					return gsc.toJson(l);
 				case MessageTypes.SUBMIT_MSG:
-					break;
+					ChatMessage input = gsc.fromJson(reqBody, ChatMessage.class);
+					if (!actives.containsKey(input.getToken())) return "";
+					suc = actives.get(input.getToken());
+					List<ChatMessage> xx = suc.submitMsg(input);
+					return gsc.toJson(xx);
 				//	Typen:
 				//  	Konversationen auflisten
 				//		Konversation erstellen

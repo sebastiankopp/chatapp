@@ -1,6 +1,8 @@
 package db;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import model.ChatMessage;
@@ -12,7 +14,9 @@ public class CUDAdapter extends AbstractDBAdapter{
 	private static final String DELETE_USER = "Delete from user where nickname = ?;";
 	private static final String ADD_MESSAGE = "Insert into messages (msg_text,msg_dt,conv_id,absender_id) values (?,?,?,?);";
 	private static final String SET_NEW_PW = "Update user set passwd_hash = ? where userid = ?";
-	private static final String ADD_NEW_CONV = "Insert into conv (conv_str) values (?);";
+	private static final String ADD_NEW_CONV = "Insert into conversation (conv_id,conv_str) values (?,?);";
+	private static final String GET_MAX_CONV = "select max(conv_id) from conversation;";
+	private static final String ADD_USR_TO_CONV = "Insert into usr_conv (conv_id, userid) values(?,?);";
 	//	private static final String CHK_UNAME_EXIST = "Select count (*) from user where nickname = ?;";
 	public CUDAdapter(){
 		super();
@@ -69,8 +73,29 @@ public class CUDAdapter extends AbstractDBAdapter{
 		
 	}
 	public boolean addConv(List<User> users){
-		return false;		// TODO finsih
-		
+		int id;
+		try {
+			ResultSet rs = con.createStatement().executeQuery(GET_MAX_CONV);
+			if (!rs.next()) id = 1;
+			else id = rs.getInt(1)+1;
+			PreparedStatement pst = con.prepareStatement(ADD_NEW_CONV);
+			pst.setInt(1, id);
+			pst.setString(2, "sdfj"); // eig egal
+			pst.executeUpdate();
+			pst = con.prepareStatement(ADD_USR_TO_CONV);
+			for (User dd: users){
+				pst.setInt(1, id);
+				pst.setInt(2, dd.getUserid());
+				pst.addBatch();
+			}
+			pst.executeBatch();
+			con.commit();
+			return true;
+		} catch (Exception sqle){
+			sqle.printStackTrace();
+			doRollback();
+			return false;
+		}		
 	}
 	public boolean deleteUserByNickName(String uname){
 		try {

@@ -36,10 +36,11 @@ public class SingleUserContext {
 		cad.changePW(user, newpw);
 		return rc?(new PWChangeSuccess(true, "Change successful")):(new PWChangeSuccess(false, "DB Error. Sorry"));
 	}
-	public Object submitMsg(ChatMessage msg){
-		
-		
-		return msg;
+	public List<ChatMessage> submitMsg(ChatMessage msg){
+		cad.addMessage(msg);
+		List<ChatMessage> msgs = rad.getMessages(msg.getConv().getConvId());
+		msgs.sort((ChatMessage a, ChatMessage b) -> a.getTstamp().compareTo(b.getTstamp()));
+		return msgs;
 	}
 	public Object addUserToConv(User ux, Conversation conv){
 		return null;

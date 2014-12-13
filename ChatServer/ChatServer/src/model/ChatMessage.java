@@ -4,18 +4,20 @@ import java.time.LocalDateTime;
 
 public class ChatMessage {
 	private String message;
+	private String token;
 	private Conversation conv;
 	private User from;
 	private LocalDateTime tstamp;
-	public ChatMessage(String msg, User user, Conversation conv) {
+	public ChatMessage(String msg, User user, Conversation conv, String token) {
 		// TODO Auto-generated constructor stub
 		tstamp = LocalDateTime.now();
 		from = user;
 		message = msg;
 		this.conv = conv;
+		this.token = token;
 	}
 	public ChatMessage(String msg, User user, Conversation conv, LocalDateTime dt){
-		this (msg, user, conv);
+		this (msg, user, conv, ""); // in dieser Situation wird kein Token gebraucht
 		this.tstamp = dt;
 	}
 	/**
@@ -68,6 +70,18 @@ public class ChatMessage {
 	}
 	public String toString(){
 		return String.format("{%s}: \"%s\" to:{%s}(%s)", this.from, this.message, this.conv, this.tstamp);
+	}
+	/**
+	 * @return the token
+	 */
+	public String getToken() {
+		return token;
+	}
+	/**
+	 * @param token the token to set
+	 */
+	public void setToken(String token) {
+		this.token = token;
 	}
 	
 }
