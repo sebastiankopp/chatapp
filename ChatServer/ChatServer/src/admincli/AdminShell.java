@@ -9,6 +9,10 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 
 public class AdminShell {
+	public static final String COMMAND_DELUSER = "deluser";
+	public static final String COMMAND_ADDUSER = "adduser";
+	public static final String COMMAND_SHUTDOWN = "shutdown";
+	public static final String COMMAND_SHOWUSERS = "showusers";
 	private String f_fromsrv, f_tosrv;
 	private BufferedReader fromsrv;
 	private PrintWriter tosrv;
@@ -25,17 +29,21 @@ public class AdminShell {
 		}
 	}
 	public void eachTime() throws IOException{
+		tosrv = new PrintWriter(new BufferedWriter(new FileWriter(f_tosrv, false)));
 		System.out.print("Admin # ");
-		String[] line = usr.nextLine().split("\\s+");
-		if (line[0].equalsIgnoreCase("shutdown")){
+		String line = usr.nextLine();
+		String[] parts = line.split("\\s+");
+		if (parts[0].equalsIgnoreCase(COMMAND_SHUTDOWN)){
 			// Server-Shutdown
-		} else if (line[0].equalsIgnoreCase("exit")){
+		} else if (parts[0].equalsIgnoreCase("exit")){
 			System.out.println("Adminshell wird beendet");
 			System.exit(0);
-		} else if (line[0].equalsIgnoreCase("adduser")){
-			
-		} else if (line[0].equalsIgnoreCase("deluser")) {
-			
+		} else if (parts[0].equalsIgnoreCase(COMMAND_ADDUSER)){
+			tosrv.println(line);
+		} else if (parts[0].equalsIgnoreCase(COMMAND_DELUSER)) {
+			tosrv.println(line);
+		} else if (parts[0].equalsIgnoreCase(COMMAND_SHOWUSERS)) {
+			tosrv.println(line);
 		} else {
 			System.err.println("Falsche Eingabe. Bitte noch einmal");
 			promptManual();
@@ -51,8 +59,10 @@ public class AdminShell {
 		String line2;
 		while ((line2 =  fromsrv.readLine()) != null)
 			System.out.println(line2);
+		fromsrv.close();
 		tosrv = new PrintWriter(new BufferedWriter(new FileWriter(f_tosrv, false)));
 		tosrv.write("");
+		tosrv.close();
 	}
 	private void promptManual(){
 		System.out.println("Syntax:");
@@ -61,6 +71,7 @@ public class AdminShell {
 		System.out.println("exit                Beenden der Adminshell");
 		System.out.println("adduser <usr> <pw>  Nutzer mit Usernamen <usr> und Passwort <pw> hinzufügen");
 		System.out.println("deluser <usr>       Nutzer <usr> entfernen");
+		System.out.println("showusers           Nutzer anzeigen");
 		System.out.println("----------------------------------------------------------------------------------");
 	}
 	

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.UUID;
 
+import admincli.ServerSideCliThread;
+
 import com.google.gson.Gson;
 
 import security.PWHasher;
@@ -25,15 +27,18 @@ public class ServerCenter {
 	private RAdapter rad;
 	private TreeMap<String,SingleUserContext> actives; // eingeloggte Nutzer
 	private PWHasher pwh;
+	private ServerSideCliThread sclit;
 	private ServerCenter (){
 		 actives = new TreeMap<String,SingleUserContext>();
 		 rad = new RAdapter();
 		 gsc = new Gson();
+		 sclit = new ServerSideCliThread();
 		 try {
 			pwh = new PWHasher();
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
+		sclit.start();
 	}
 	public static ServerCenter getInstance() {
 		if (instance == null)

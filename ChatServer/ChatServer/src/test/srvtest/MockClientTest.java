@@ -16,7 +16,6 @@ import model.LoginRequest;
 import model.LoginResponse;
 import model.User;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 

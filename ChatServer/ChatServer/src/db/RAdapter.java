@@ -107,7 +107,7 @@ public class RAdapter extends AbstractDBAdapter {
 			throw new NullPointerException(e.getMessage());
 		}
 	}
-	private User getUserById(int userid) throws NullPointerException {
+	public User getUserById(int userid) throws NullPointerException {
 		// TODO Auto-generated method stub
 		PreparedStatement pst;
 		try {

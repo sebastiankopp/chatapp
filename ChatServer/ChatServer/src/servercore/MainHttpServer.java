@@ -6,8 +6,8 @@ import java.net.InetSocketAddress;
 import com.sun.net.httpserver.HttpServer;
 
 public class MainHttpServer {
-	private static final String CONTEXT  = "/test";
-	private int PORT = 8080;
+	public static final String CONTEXT  = "/test";
+	public final static int PORT = 8080;
 	private HttpServer server;
 	public MainHttpServer() throws IOException{
         server = HttpServer.create(new InetSocketAddress(PORT), 0);

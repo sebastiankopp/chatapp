@@ -6,7 +6,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import db.AbstractDBAdapter;
 import db.CUDAdapter;
 import db.RAdapter;
 
