@@ -59,7 +59,10 @@ class ClientGuiView {
 	
 	// Kontakte
 	JList<String> listKontakte = new JList<String>();
-
+	
+	// Werbung (bisl Geld verdienen :-) )
+	JTextArea memoWerbung = new JTextArea();
+	
 	// MenuBar
 	 JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
@@ -149,6 +152,15 @@ class ClientGuiView {
 		 return panelOuter;
 	 }
 
+	 JPanel createAdvertPanel(){
+		 JPanel panel = new JPanel();
+		 panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		 setFixSizeOfComponent(panel, 700, 100);
+		 panel.add(memoWerbung);	 
+		 memoWerbung.setEditable(false);
+		 return panel;
+	 }
+	 
 	// Frame Main
 	 void createFrame() {
 		frameMain = new JFrame("Chat-App pre-alpha");
@@ -180,6 +192,7 @@ class ClientGuiView {
 		frameMain.add(createConfigPanel(), BorderLayout.WEST);
 		//frameMain.add(new JSeparator(SwingConstants.VERTICAL), BorderLayout.CENTER);
 		frameMain.add(createChatPanel(), BorderLayout.CENTER);
+		frameMain.add(createAdvertPanel(), BorderLayout.SOUTH);
 
 		frameMain.pack();
 	}

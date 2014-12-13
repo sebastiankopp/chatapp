@@ -289,6 +289,10 @@ public class Server {
 		/*
 		 * Write a String to the Client output stream
 		 */
+		
+		//TODO Der String muss durch ChatMessage ersetzt werden und der Client muss ebenso prüfen welche Art von Message es ist, damit MESSAGE, WHOISIN und ADVERT unterschieden werden können
+		//Eigentlich muss das, was jetzt der Client macht der Server auch machen und umgekehrt
+		
 		private boolean writeMsg(String msg) {
 			// if Client is still connected send the message to it
 			if(!socket.isConnected()) {
