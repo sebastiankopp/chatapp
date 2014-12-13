@@ -3,6 +3,9 @@ package db;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import model.ChatMessage;
@@ -12,11 +15,12 @@ public class CUDAdapter extends AbstractDBAdapter{
 	private static final String ADD_USER = "Insert into user (nickname, passwd_hash) values (?,?);";
 	private static final String DELETE_USER_MESSAGES = "Delete from message where absender_id = (select userid from user where nickname = ?);";
 	private static final String DELETE_USER = "Delete from user where nickname = ?;";
-	private static final String ADD_MESSAGE = "Insert into messages (msg_text,msg_dt,conv_id,absender_id) values (?,?,?,?);";
+	private static final String ADD_MESSAGE = "Insert into message (msg_text,msg_dt,conv_id,absender_id) values (?,?,?,?);";
 	private static final String SET_NEW_PW = "Update user set passwd_hash = ? where userid = ?";
 	private static final String ADD_NEW_CONV = "Insert into conversation (conv_id,conv_str) values (?,?);";
 	private static final String GET_MAX_CONV = "select max(conv_id) from conversation;";
 	private static final String ADD_USR_TO_CONV = "Insert into usr_conv (conv_id, userid) values(?,?);";
+	private static final String DELETE_USER_CONV_LINES = "Delete from usr_conv where userid = (select userid from user where nickname = ?);";
 	//	private static final String CHK_UNAME_EXIST = "Select count (*) from user where nickname = ?;";
 	public CUDAdapter(){
 		super();
@@ -32,7 +36,7 @@ public class CUDAdapter extends AbstractDBAdapter{
 			PreparedStatement pst = con.prepareStatement(ADD_USER);
 			pst.setString(1, desiredNickname);
 			pst.setString(2, pwh.createHash(pw));
-			pst.execute();
+			pst.executeUpdate();
 			con.commit();
 			return true;
 		} catch (Exception e) {
@@ -44,8 +48,9 @@ public class CUDAdapter extends AbstractDBAdapter{
 	public boolean addMessage(ChatMessage msg){
 		try{
 			PreparedStatement pst = con.prepareStatement(ADD_MESSAGE);
+			Timestamp tstmp = Timestamp.valueOf(msg.getTstamp());
 			pst.setString(1, msg.getMessage());
-			pst.setObject(2, msg.getTstamp());	// sufficient acc to http://www.oracle.com/technetwork/articles/java/jf14-date-time-2125367.html
+			pst.setTimestamp(2, tstmp);
 			pst.setInt(3, msg.getConv().getConvId());
 			pst.setInt(4, msg.getFrom().getUserid());
 			pst.execute();
@@ -102,6 +107,8 @@ public class CUDAdapter extends AbstractDBAdapter{
 			PreparedStatement pst = con.prepareStatement(DELETE_USER_MESSAGES);
 			pst.setString(1, uname);
 			pst.executeUpdate();
+			pst = con.prepareStatement(DELETE_USER_CONV_LINES);
+			pst.setString(1, uname);
 			pst = con.prepareStatement(DELETE_USER);
 			pst.setString(1, uname);
 			pst.executeUpdate();

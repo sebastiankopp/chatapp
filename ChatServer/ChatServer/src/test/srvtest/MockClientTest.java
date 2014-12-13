@@ -42,6 +42,7 @@ public class MockClientTest {
 	@Test
 	public void test(){
 		try{
+			System.out.println(rad.getAllUsersforPrint());
 		HashMap<String,String> uspw = new HashMap<String, String>();
 		uspw.put("user1", "123");
 		uspw.put("user2", "345");
@@ -54,8 +55,14 @@ public class MockClientTest {
 			LoginRequest lrq = new LoginRequest();
 			lrq.setPw(pwx);
 			lrq.setUsername(ux);
-			String resp = scnt.processJson(gs.toJson(lrq, LoginRequest.class), ""+MessageTypes.LOGIN_REQ);
-			String token = gs.fromJson(resp, LoginResponse.class).getToken();
+			lrq.setHost("localhost");
+			lrq.setPort(4711);
+			String resp = scnt.processJson(gs.toJson(lrq, LoginRequest.class), new Integer(MessageTypes.LOGIN_REQ).toString());
+			System.out.println(rad.getAllUsersforPrint());
+			System.err.println(resp);
+//			System.exit(0);
+			LoginResponse lrsp = gs.fromJson(resp, LoginResponse.class);
+			String token = lrsp.getToken();
 			User u = clntmap.remove(ux);
 			clntmap.put(token, u);
 			System.err.printf("User %s mit Token %s hinzugefügt\n", u.getNickname(), token);
@@ -89,6 +96,7 @@ public class MockClientTest {
 		try {
 			pw.close();
 		} catch (Exception e1) {}
+		System.err.println("Kurz vor Schluss");
 		assertTrue(count == clntmap.size() && count != 0); // Wenn er bis hierhin noch ned gescheitert, sollts klappen
 		} catch (Exception suexcept){
 			StackTraceElement[] ste = suexcept.getStackTrace();

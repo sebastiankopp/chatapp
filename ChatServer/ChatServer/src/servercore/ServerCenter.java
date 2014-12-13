@@ -1,5 +1,6 @@
 package servercore;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.TreeMap;
@@ -28,6 +29,11 @@ public class ServerCenter {
 		 actives = new TreeMap<String,SingleUserContext>();
 		 rad = new RAdapter();
 		 gsc = new Gson();
+		 try {
+			pwh = new PWHasher();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 	}
 	public static ServerCenter getInstance() {
 		if (instance == null)
@@ -64,10 +70,23 @@ public class ServerCenter {
 					
 					break;
 				case MessageTypes.LOGIN_REQ:
+					System.err.println("Working on LoginRequest");
+					System.err.println(reqBody);
 					LoginRequest ask = gsc.fromJson(reqBody, LoginRequest.class);
-					SingleUserContext usctx = loginUser(ask);
-					actives.put(usctx.getToken(), usctx);
-					return gsc.toJson(new LoginResponse(true, usctx.getToken()), LoginResponse.class);
+					try {
+						LoginResponse lresp = loginUser(ask);
+						String returned = gsc.toJson(lresp, LoginResponse.class);
+						System.err.println(returned);
+						return returned;
+					} catch (Exception e) {
+						LoginResponse failx = new LoginResponse();
+						failx.setErrstr("Login failed");
+						failx.setSuccess(false);
+						failx.setToken("no token");
+						String failstring = gsc.toJson(failx, LoginResponse.class);
+						System.err.println(failstring);
+						return failstring;
+					}
 				case MessageTypes.LOGOUT_REQ:
 					logoutUser(reqBody); // Logoutrequest besteht nur aus Token im Body
 					break;
@@ -96,7 +115,7 @@ public class ServerCenter {
 				}
 			} catch (Exception e){
 				if (e instanceof LoginException){
-					return gsc.toJson(new LoginResponse(false, e.getMessage()), LoginResponse.class);
+					
 				}
 				StringBuilder rc = new StringBuilder();
 				Arrays.stream(e.getStackTrace()).map(el -> el.toString() + "\n").forEach(rc::append);
@@ -105,17 +124,22 @@ public class ServerCenter {
 		}
 		return "";
 	}
-	protected SingleUserContext loginUser(LoginRequest liq) throws LoginException{
+	protected LoginResponse loginUser(LoginRequest liq) throws LoginException{
 		// TODO
 		boolean rcx = rad.validateUser(liq.getUsername(), liq.getPw());
-		if (!rcx) throw new LoginException();
+		if (!rcx) {System.err.println(rcx);throw new LoginException();}
+		else System.err.println("User " + liq.getUsername() + " erfolgreich validiert");
 		StringBuilder veryRandom = new StringBuilder(UUID.randomUUID().toString());
 		for (int i = 0; i < 20; i++)
 			veryRandom.append(UUID.randomUUID().toString());
 		String token = pwh.createHash(veryRandom.toString());
 		User usr = rad.getUserByNickname(liq.getUsername());
 		actives.put(token, new SingleUserContext(usr, token));
-		return null;
+		LoginResponse rc = new LoginResponse();
+		rc.setErrstr("no err");
+		rc.setToken(token);
+		rc.setSuccess(true);
+		return rc;
 	}
 	protected void logoutUser(String token){
 		actives.get(token).logout();

@@ -163,8 +163,8 @@ public class ClientGUI extends JFrame implements ActionListener {
 			}
 
 			// try creating a new Client with GUI
-			client = new Client(server, port, username, this);
-			// test if we can start the Client
+			client = new Client(server, port, username);// GuiView instead of GUI??? @Tobi: I fear your programming skills are insufficient! 
+			// test if we can start the Client			// (A biologist shall not construct a combustion engine, so a biologist SHALL NOT LEAD the construction of such a complex product!!)
 			if(!client.start()) 
 				return;
 			tf.setText("");
