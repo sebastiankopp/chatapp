@@ -2,6 +2,7 @@ package chatBase.model;
 
 import java.util.List;
 
+//TODO in ChatMessage integrieren
 public class Advertisement implements java.io.Serializable{
 	private static final long serialVersionUID = -1608837701366114900L;
 	private List<String> fontFamilies; // zugelassene Schriftarten
