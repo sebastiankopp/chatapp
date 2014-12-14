@@ -1,4 +1,4 @@
-package chatBase;
+package chatBase.client;
 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;

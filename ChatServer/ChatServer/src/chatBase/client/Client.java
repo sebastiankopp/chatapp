@@ -1,4 +1,4 @@
-package chatBase;
+package chatBase.client;
 
 import java.net.*;
 import java.io.*;

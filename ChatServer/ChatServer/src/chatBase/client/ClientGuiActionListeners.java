@@ -1,4 +1,4 @@
-package chatBase;
+package chatBase.client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
