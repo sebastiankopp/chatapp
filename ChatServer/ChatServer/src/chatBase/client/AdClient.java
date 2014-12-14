@@ -26,7 +26,7 @@ public class AdClient extends Thread {
 	private Gson gs;
 	private Lookup nlu;
 	private SimonWerbeServerInterface swsint;
-	private long updInterval;
+//	private long updInterval;
 	/**
 	 * Konstruktor wird nur bei der GUI-Instanzziierung aufgerufen
 	 * @param target JTextArea, die mit Werbung versehen werden soll
@@ -36,7 +36,7 @@ public class AdClient extends Thread {
 		gs = new Gson();
 		this.target.setAlignmentX(JTextArea.CENTER_ALIGNMENT);
 		this.target.setAlignmentY(JTextArea.CENTER_ALIGNMENT);
-		this.updInterval = WerbeSchleuder.DEFAULT_UPD_INTERVAL;
+//		this.updInterval = WerbeSchleuder.DEFAULT_UPD_INTERVAL;
 	}
 	/**
 	 * Aufruf beim Login. Fängt mit dem Werbung ziehen an
@@ -69,7 +69,7 @@ public class AdClient extends Thread {
 			Advertisement ad = gs.fromJson(swsint.createAd(), Advertisement.class);
 			setFont(ad, 0);
 			target.setText(ad.getAdText());
-			updInterval = ad.getUpdFreq();
+			long updInterval = ad.getUpdFreq();
 			try {
 				Thread.sleep(updInterval);
 			} catch (InterruptedException e) { }
