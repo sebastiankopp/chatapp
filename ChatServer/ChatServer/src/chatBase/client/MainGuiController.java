@@ -3,7 +3,7 @@ package chatBase.client;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-public class MainController {
+public class MainGuiController {
 
 	public static void main(String[] args) {
 		try {

@@ -1,4 +1,4 @@
-package chatBase.client;
+package chatBase.oldWORKING;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -127,7 +127,6 @@ class ClientGuiView {
 		 setFixSizeOfComponent(panelKontakte, 196, 196);
 		 panelKontakte.add(new JLabel("gerade online:"));
 		 panelKontakte.add(new JScrollPane(listKontakte));
-		 //setFixSizeOfComponent(listKontakte, 194, 194);
 		 
 		 panelInner.add(panelEinstellungen);
 		 panelInner.add(Box.createRigidArea(new Dimension(0,40))); //bisl Abstand
