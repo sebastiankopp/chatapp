@@ -2,6 +2,8 @@ package chatBase.client;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -75,15 +77,27 @@ class ClientGuiView {
 		 
 		 JPanel wrapPanel4Chat = new JPanel();
 		 wrapPanel4Chat.setLayout(new BoxLayout(wrapPanel4Chat, BoxLayout.X_AXIS));
-		 wrapPanel4Chat.add(new JScrollPane(memoChat));
-		 setFixSizeOfComponent(memoChat, 400, 100);
+		 
+		 JPanel panelMemoChatWrap = new JPanel();
+		 panelMemoChatWrap.setLayout(new GridLayout(1,1));
+		 setFixSizeOfComponent(panelMemoChatWrap, 400, 100);
+		 //setFixSizeOfComponent(memoChat, 400, 100);
+		 
+		 panelMemoChatWrap.add(new JScrollPane(memoChat));
+		 
+		 wrapPanel4Chat.add(panelMemoChatWrap);
 		 wrapPanel4Chat.add(buttonSenden);
 		 setFixSizeOfComponent(buttonSenden,100,100);
 		 buttonSenden.addActionListener(clientguiAL.actionListenerButtonSenden);
 		 
-		 panel.add(new JScrollPane(memoVerlauf));
+		 JPanel panelMemoVerlaufWrap = new JPanel();
+		 panelMemoVerlaufWrap.setLayout(new GridLayout(1,1));
 		 memoVerlauf.setEditable(false);
-		 setFixSizeOfComponent(memoVerlauf, 500, 300);
+		 //setFixSizeOfComponent(memoVerlauf, 500, 300);
+		 setFixSizeOfComponent(panelMemoVerlaufWrap, 500, 300);
+		 panelMemoVerlaufWrap.add(new JScrollPane(memoVerlauf));
+		 
+		 panel.add(panelMemoVerlaufWrap);
 		 panel.add(new JSeparator(SwingConstants.HORIZONTAL));
 		 panel.add(wrapPanel4Chat);
 		 setFixSizeOfComponent(wrapPanel4Chat,500,100);
