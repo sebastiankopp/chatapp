@@ -7,7 +7,11 @@ import chatBase.model.Advertisement;
 import de.root1.simon.Registry;
 import de.root1.simon.Simon;
 import de.root1.simon.exceptions.NameBindingException;
-
+/**
+ * Stellt das Objekt im Server dar, das die Werbung absondert
+ * @author Sebastian Kopp
+ *
+ */
 public class WerbeSchleuder  {
 //	private int updInterval;
 //	private int maxVal;

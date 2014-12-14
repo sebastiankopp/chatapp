@@ -1,8 +1,13 @@
 package chatBase.model;
 
 import java.util.List;
-
-//TODO in ChatMessage integrieren
+/**
+ * Repräsentiert eine Werbemessage mit Inhalt (Text), Schriftarten (wie CSS, falls eine nicht unterstützt wird,
+ * dann halt eine andere) und Schriftgröße
+ * 
+ * @author Sebastian Kopp
+ *
+ */
 public class Advertisement implements java.io.Serializable{
 	private static final long serialVersionUID = -1608837701366114900L;
 	private List<String> fontFamilies; // zugelassene Schriftarten

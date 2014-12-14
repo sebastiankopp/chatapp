@@ -7,7 +7,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import chatBase.client.AdClient;
 import chatBase.model.Advertisement;
-
+/**
+ * Hauptklasse des Servers. WerbeSchleuder wird vorerst hier instanziiert
+ * @author Sebastian
+ *
+ */
 public class ServerMain {
 	private static int portNumber;
 	public static void main(String[] args){

@@ -1,7 +1,11 @@
 package chatBase.srv;
 
 import java.io.PrintStream;
-
+/**
+ * Klasse zum Logging für den Server
+ * @author Sebastian Kopp
+ *
+ */
 public class LoggingDaemon {
 	private PrintStream pw;
 	public LoggingDaemon(PrintStream ps){

@@ -8,6 +8,11 @@ import chatBase.model.Advertisement;
 import de.root1.simon.annotation.SimonRemote;
 
 @SimonRemote(value={SimonWerbeServerInterface.class})
+/**
+ * Serverseitige Implementierung des Werbeabrufs
+ * @author Sebastian Kopp
+ *
+ */
 class SimonWerbeServerImpl implements SimonWerbeServerInterface {
 	private Vector<Advertisement> ads;
 	private Gson gs;

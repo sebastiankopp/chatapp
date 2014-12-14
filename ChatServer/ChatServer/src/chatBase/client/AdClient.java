@@ -17,15 +17,19 @@ import de.root1.simon.exceptions.LookupFailedException;
  * Wird dem Server hinzugefügt. Fpr jede Verbindung sollte die Serverportnummer aus Protokollgründen 
  * hier um 2 größer sein als für die Chatkommunikation. Wird einmal instanziiert, bei jedem Logout gestoppt,
  * Port und Server-Adresse werden bei jedem Login neu gesetzt, dann wird die Werbung wieder gestartet.
- * @author Sebastian
+ * @author Sebastian Kopp
  *
  */
 public class AdClient extends Thread {
 	private JTextArea target;
-	private static final int UPD_INTERVAL = 20000;
+	private static final int UPD_INTERVAL = 10000; // Werbeupdateintervall
 	private Gson gs;
 	private Lookup nlu;
 	private SimonWerbeServerInterface swsint;
+	/**
+	 * Konstruktor wird nur bei der GUI-Insatnziierung aufgerufen
+	 * @param target JTextArea, die mit Werbung versehen werden soll
+	 */
 	public AdClient(JTextArea target){
 		this.target = target;
 		gs = new Gson();
