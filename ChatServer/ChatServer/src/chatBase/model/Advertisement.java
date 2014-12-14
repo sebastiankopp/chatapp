@@ -1,6 +1,8 @@
 package chatBase.model;
 
 import java.util.List;
+
+import chatBase.srv.WerbeSchleuder;
 /**
  * Repräsentiert eine Werbemessage mit Inhalt (Text), Schriftarten (wie CSS, falls eine nicht unterstützt wird,
  * dann halt eine andere) und Schriftgröße
@@ -17,11 +19,14 @@ public class Advertisement implements java.io.Serializable{
 	/**
 	 * @return the fontSize
 	 */
-	public Advertisement(){}
+	public Advertisement(){
+		this.updFreq = WerbeSchleuder.DEFAULT_UPD_INTERVAL;
+	}
 	public Advertisement(String text){
 		fontFamilies = null;
 		adText = text;
 		fontSize = 12;
+		this.updFreq = WerbeSchleuder.DEFAULT_UPD_INTERVAL;
 	}
 	public Advertisement(String text, List<String> ffam, int fsize, int updInterval){
 		fontFamilies = ffam;
