@@ -14,7 +14,7 @@ import de.root1.simon.Simon;
 import de.root1.simon.exceptions.EstablishConnectionFailed;
 import de.root1.simon.exceptions.LookupFailedException;
 /**
- * Wird dem Server hinzugefügt. Fpr jede Verbindung sollte die Serverportnummer aus Protokollgründen 
+ * Wird dem Client hinzugefügt. Fpr jede Verbindung sollte die Serverportnummer aus Protokollgründen 
  * hier um 2 größer sein als für die Chatkommunikation. Wird einmal instanziiert, bei jedem Logout gestoppt,
  * Port und Server-Adresse werden bei jedem Login neu gesetzt, dann wird die Werbung wieder gestartet.
  * @author Sebastian Kopp
@@ -27,7 +27,7 @@ public class AdClient extends Thread {
 	private Lookup nlu;
 	private SimonWerbeServerInterface swsint;
 	/**
-	 * Konstruktor wird nur bei der GUI-Insatnziierung aufgerufen
+	 * Konstruktor wird nur bei der GUI-Instanzziierung aufgerufen
 	 * @param target JTextArea, die mit Werbung versehen werden soll
 	 */
 	public AdClient(JTextArea target){
@@ -37,7 +37,7 @@ public class AdClient extends Thread {
 		this.target.setAlignmentY(JTextArea.CENTER_ALIGNMENT);
 	}
 	/**
-	 * Beginnt beim Login die Bombardierung mit Werbung
+	 * Aufruf beim Login. Fängt mit dem Werbung ziehen an
 	 * @param host Der Chatserver
 	 * @param adport Werbe-Port des Servers. Um 2 höher als der Chatport
 	 */
@@ -60,7 +60,7 @@ public class AdClient extends Thread {
 		}
 	}
 	/**
-	 * Zeigt alle @see UPD_INTERVAL neue Werbung an. Werbung ist kein reiner String, sondern JSON.
+	 * Zeigt alle @see UPD_INTERVAL ms neue Werbung an. Werbung ist kein reiner String, sondern JSON.
 	 */
 	public void run(){
 		while(true){
@@ -73,7 +73,7 @@ public class AdClient extends Thread {
 		}
 	}
 	/**
-	 * Hilfsmethode, um für jede Werbung den Style neu zu setzen
+	 * Hilfsmethode, um für jede Werbung den Style neu zu setzen. Richtet sich nach den Vorgaben in der Werbeanzeige
 	 * @param ad Werbeanzeige
 	 * @param i Nummer der ausprobierten Schriftart. Werbung hat (analog zu CSS) mehrere Schriftarten
 	 */
