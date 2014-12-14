@@ -13,8 +13,8 @@ import java.util.TreeMap;
  */
 public class Server {
 	public static final int DEFAULT_PORT = 1500;
-	private int maxId;
-	TreeMap<Integer, ClientThread> map; // an ArrayList to keep the list of the Client
+//	private int maxId;
+	TreeMap<Long, ClientThread> map; // an ArrayList to keep the list of the Client
 	private int port;// the port number to listen for connection
 	private boolean keepGoing;// the boolean that will be turned of to stop the server
 	private LoggingDaemon ld;
@@ -27,9 +27,9 @@ public class Server {
 	}
 	private Server(int port, PrintStream ps) {
 		this.port = port;
-		map = new TreeMap<Integer,ClientThread>();
+		map = new TreeMap<Long,ClientThread>();
 		this.ld = new LoggingDaemon(ps);
-		maxId = 0;
+//		maxId = 0;
 	}	
 	public void performInfiniteLoop() {
 		keepGoing = true;
@@ -37,16 +37,16 @@ public class Server {
 		try{
 			ServerSocket serverSocket = new ServerSocket(port);
 			while(keepGoing) {
-				int clntThrId = maxId++;
 				logMessage("Server waiting for Clients on port " + port + ".");
 				Socket socket = serverSocket.accept();  	// accept connection
+				long clntThrId = System.currentTimeMillis();
 				if (!keepGoing) break;
 				ClientThread ct = new ClientThread(this, socket, clntThrId);  // make a thread of it
 				map.put(clntThrId, ct);									// save it in the ArrayList
 				ct.start();
 			}
 			serverSocket.close();
-			for (Entry<Integer, ClientThread> dd: map.entrySet()){
+			for (Entry<Long, ClientThread> dd: map.entrySet()){
 				try{
 					dd.getValue().getsInput().close();
 					dd.getValue().getsOutput().close();
@@ -89,7 +89,7 @@ public class Server {
 		ld.getPw().println(messageWithDT = "\n"+LocalDateTime.now().toString() + " " + message);// log message for server
 		// we loop in reverse order in case we would have to remove a Client
 		// because it has disconnected
-		map.forEach((Integer ii, ClientThread dd) ->{
+		map.forEach((Long ii, ClientThread dd) ->{
 			boolean rc= dd.writeMsg(messageWithDT);
 			if (!rc){
 				map.remove(ii);
@@ -98,7 +98,7 @@ public class Server {
 		});
 	}
 	// for a client who logoff using the LOGOUT message
-	synchronized void remove(int id) {
+	synchronized void remove(long id) {
 		// scan the array list until we found the Id
 		map.remove(id);
 	}

@@ -17,13 +17,13 @@ class ClientThread extends Thread {
 	private Socket socket;// the socket where to listen/talk
 	private ObjectInputStream sInput;
 	private ObjectOutputStream sOutput;
-	private int id; // my unique id (easier for disconnection)
+	private long id; // my unique id (easier for disconnection)
 	private String username;
 	private ChatMessage cm; // received msg
 	private String date; // Verbindungsdatum
 
 	// Constructore
-	public ClientThread(Server server, Socket socket, int id) {
+	public ClientThread(Server server, Socket socket, long id) {
 		this.server = server;
 		// a unique id
 		this.id = id;
@@ -75,7 +75,7 @@ class ClientThread extends Thread {
 			case ChatMessage.WHOISIN:
 				writeMsg("List of the users connected at " + LocalDateTime.now().toString()+ "\n");
 				// scan al the users connected
-				server.map.forEach((Integer ii, ClientThread dd) -> 
+				server.map.forEach((Long ii, ClientThread dd) -> 
 					writeMsg((ii+1) + ") " + dd.getUsername() + " since " + dd.date));
 				break;
 			}
