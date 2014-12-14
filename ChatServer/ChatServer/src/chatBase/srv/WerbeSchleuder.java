@@ -15,6 +15,7 @@ import de.root1.simon.exceptions.NameBindingException;
 public class WerbeSchleuder  {
 //	private int updInterval;
 //	private int maxVal;
+	public static final int DEFAULT_UPD_INTERVAL = 10000;
 	private Vector<Advertisement> ads;
 	public static final String AD_BINDING = "werbeserver";
 	private Registry reg;

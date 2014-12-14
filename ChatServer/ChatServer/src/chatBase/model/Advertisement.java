@@ -13,6 +13,7 @@ public class Advertisement implements java.io.Serializable{
 	private List<String> fontFamilies; // zugelassene Schriftarten
 	private int fontSize;	// Schriftgröße
 	private String adText;
+	private long updFreq;
 	/**
 	 * @return the fontSize
 	 */
@@ -22,10 +23,11 @@ public class Advertisement implements java.io.Serializable{
 		adText = text;
 		fontSize = 12;
 	}
-	public Advertisement(String text, List<String> ffam, int fsize){
+	public Advertisement(String text, List<String> ffam, int fsize, int updInterval){
 		fontFamilies = ffam;
 		fontSize = fsize;
 		adText = text;
+		this.updFreq = updInterval;
 	}
 	public int getFontSize() {
 		return fontSize;
@@ -59,5 +61,17 @@ public class Advertisement implements java.io.Serializable{
 	 */
 	public void setAdText(String adText) {
 		this.adText = adText;
+	}
+	/**
+	 * @return the updFreq
+	 */
+	public long getUpdFreq() {
+		return updFreq;
+	}
+	/**
+	 * @param updFreq the updFreq to set
+	 */
+	public void setUpdFreq(long updFreq) {
+		this.updFreq = updFreq;
 	}
 }

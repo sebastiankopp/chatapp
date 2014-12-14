@@ -28,8 +28,8 @@ public class ServerMain {
 			try {
 				List<String> ffms = Arrays.asList("Helvetica", "Sans-serif", "Sans Serif", "Times New Roman");
 				WerbeSchleuder ws = new WerbeSchleuder(portNumber+2);
-				ws.addAdvertisement(new Advertisement("XX -- Das Auto", ffms, 16));
-				ws.addAdvertisement(new Advertisement("Periel Color -- Das beste Waschmittel", ffms, 14));
+				ws.addAdvertisement(new Advertisement("XX -- Das Auto", ffms, 16, WerbeSchleuder.DEFAULT_UPD_INTERVAL));
+				ws.addAdvertisement(new Advertisement("Periel Color -- Das beste Waschmittel", ffms, 14, WerbeSchleuder.DEFAULT_UPD_INTERVAL));
 			} catch (Exception e) {return;}
 		}).start();
 		// War nur ein Test
