@@ -33,12 +33,11 @@ public class Server {
 	}	
 	public void performInfiniteLoop() {
 		keepGoing = true;
-		int clntThrId = maxId;
-		maxId++;
 		/* create socket server and wait for connection requests */
 		try{
 			ServerSocket serverSocket = new ServerSocket(port);
 			while(keepGoing) {
+				int clntThrId = maxId++;
 				logMessage("Server waiting for Clients on port " + port + ".");
 				Socket socket = serverSocket.accept();  	// accept connection
 				if (!keepGoing) break;
