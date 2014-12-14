@@ -1,19 +1,31 @@
 package chatBase.srv;
 
-import java.util.concurrent.ConcurrentMap;
-
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.Vector;
 import chatBase.model.Advertisement;
+import de.root1.simon.Registry;
+import de.root1.simon.Simon;
+import de.root1.simon.exceptions.NameBindingException;
 
-public class WerbeSchleuder extends Thread {
-	private int updInterval;
-	private int maxVal;
-	private ConcurrentMap<Integer,Advertisement> ads;
-	public WerbeSchleuder(int interval){
-		updInterval = interval;
-		maxVal = 0;
+public class WerbeSchleuder  {
+//	private int updInterval;
+//	private int maxVal;
+	private Vector<Advertisement> ads;
+	public static final String AD_BINDING = "werbeserver";
+	private Registry reg;
+//	private SimonWerbeServerImpl swsim;
+	public WerbeSchleuder(int port) throws UnknownHostException, IOException, NameBindingException{
+//		updInterval = interval;
+		ads = new Vector<Advertisement>();
+		reg = Simon.createRegistry(port);
+		reg.bind(AD_BINDING, new SimonWerbeServerImpl(this));
 	}
-	public int addAdvertisement(Advertisement ad){
-		ads.put(maxVal, ad);
-		return maxVal++;
+	public void addAdvertisement(Advertisement ad){
+		ads.add(ad);
 	}
+	Vector<Advertisement> getAds(){
+		return this.ads;
+	}
+	
 }

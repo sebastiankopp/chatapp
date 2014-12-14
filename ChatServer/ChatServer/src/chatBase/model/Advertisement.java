@@ -7,9 +7,21 @@ public class Advertisement implements java.io.Serializable{
 	private static final long serialVersionUID = -1608837701366114900L;
 	private List<String> fontFamilies; // zugelassene Schriftarten
 	private int fontSize;	// Schriftgröße
+	private String adText;
 	/**
 	 * @return the fontSize
 	 */
+	public Advertisement(){}
+	public Advertisement(String text){
+		fontFamilies = null;
+		adText = text;
+		fontSize = 12;
+	}
+	public Advertisement(String text, List<String> ffam, int fsize){
+		fontFamilies = ffam;
+		fontSize = fsize;
+		adText = text;
+	}
 	public int getFontSize() {
 		return fontSize;
 	}
@@ -30,5 +42,17 @@ public class Advertisement implements java.io.Serializable{
 	 */
 	public void setFontFamilies(List<String> fontFamilies) {
 		this.fontFamilies = fontFamilies;
+	}
+	/**
+	 * @return the adText
+	 */
+	public String getAdText() {
+		return adText;
+	}
+	/**
+	 * @param adText the adText to set
+	 */
+	public void setAdText(String adText) {
+		this.adText = adText;
 	}
 }
