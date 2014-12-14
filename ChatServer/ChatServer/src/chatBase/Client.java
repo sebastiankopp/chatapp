@@ -4,6 +4,8 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
+import chatBase.model.ChatMessage;
+
 /*
  * The Client that can be run both as a console or a GUI
  */

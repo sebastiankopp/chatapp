@@ -3,6 +3,8 @@ package chatBase;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import chatBase.model.ChatMessage;
+
 public class ClientGuiActionListeners {
 	
 	private ClientGuiView gui;

@@ -1,6 +1,9 @@
 package chatBase;
 
 import javax.swing.*;
+
+import chatBase.model.ChatMessage;
+
 import java.awt.*;
 import java.awt.event.*;
 
