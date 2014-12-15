@@ -5,6 +5,7 @@ import java.io.*;
 
 import chatBase.model.ChatMessage;
 import chatBase.model.ChatMessageMessage;
+import chatBase.model.ChatMessageWhoisin;
 
 
 public class ClientController  {
@@ -122,7 +123,9 @@ public class ClientController  {
 							cgv.appendMemoVerlauf(cmm.getMessage());
 							break;
 						case ChatMessage.WHOISIN:
-							//noch nicht implementiert
+							ChatMessageWhoisin cmw = (ChatMessageWhoisin) cmMsg; //cast is OK cause type is message
+							String[] aryList = cmw.getKontaktListe().toArray(new String[cmw.getKontaktListe().size()]);
+							cgv.listKontakte.setListData(aryList);
 							break;
 						}
 				}
