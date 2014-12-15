@@ -55,7 +55,8 @@ public class ClientGuiControllerActionListeners {
 		public void actionPerformed(ActionEvent e) {
 			if (gui.istVerbunden){
 	gui.client.sendMessage(new ChatMessageMessage(ChatMessage.MESSAGE, gui.memoChat.getText()));				
-	gui.memoChat.setText("");}
+	gui.memoChat.setText("");
+	gui.memoChat.requestFocusInWindow();}
 			//else nix machen
 		}
 	}; 
