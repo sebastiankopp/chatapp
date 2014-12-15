@@ -1,6 +1,11 @@
 package chatBase.client;
 
 import java.net.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.io.*;
 
 import chatBase.model.ChatMessage;
@@ -108,6 +113,16 @@ public class ClientController  {
 		cgv.verbindungsfehler();
 			
 	}
+	
+	  List<String> readSmallTextFile(String aFileName) throws IOException {
+		    Path path = Paths.get(aFileName);
+		    return Files.readAllLines(path, StandardCharsets.UTF_8);
+	  }
+		  
+	  void writeSmallTextFile(List<String> aLines, String aFileName) throws IOException {
+	    Path path = Paths.get(aFileName);
+	    Files.write(path, aLines, StandardCharsets.UTF_8);
+	  }
 
 	// Listen-Thread-Klasse, die auf Messages vom Server wartet und an Gui weitergibt
 	class ListenFromServer extends Thread {

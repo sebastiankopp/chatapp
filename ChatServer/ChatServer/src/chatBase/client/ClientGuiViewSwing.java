@@ -57,8 +57,10 @@ class ClientGuiViewSwing {
 		JMenu menuEinstellungen = new JMenu("Einstellungen");
 		menuBar.add(menuEinstellungen);
 		JMenuItem menuItemEinstellungenSichern = new JMenuItem("Sichern");
+		menuItemEinstellungenSichern.addActionListener(clientguiAL.actionListenerEinstellungenSichern);
 		menuEinstellungen.add(menuItemEinstellungenSichern);
 		JMenuItem menuItemEinstellungenLaden = new JMenuItem("Laden");
+		menuItemEinstellungenLaden.addActionListener(clientguiAL.actionListenerEinstellungenLaden);
 		menuEinstellungen.add(menuItemEinstellungenLaden);
 		return menuBar;
 	}

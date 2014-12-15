@@ -2,6 +2,9 @@ package chatBase.client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import chatBase.model.ChatMessage;
 import chatBase.model.ChatMessageMessage;
@@ -12,12 +15,72 @@ public class ClientGuiControllerActionListeners {
 	public ActionListener actionListenerButtonLogout;
 	public ActionListener actionListenerButtonLogin;
 	public ActionListener actionListenerButtonSenden;
+	public ActionListener actionListenerEinstellungenSichern;
+	public ActionListener actionListenerEinstellungenLaden;
 	
 	public ClientGuiControllerActionListeners(ClientGuiViewSwing clientGuiView) {
 		gui = clientGuiView;
 	
 
 	// Control Actionlisterners
+		
+	actionListenerEinstellungenSichern = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			File file =new File("config.cfg");
+			 
+    	    //if file doesnt exists, then create it
+    	    if(!file.exists()){
+    	    	try {
+					file.createNewFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    	    }
+    	    
+    	    try {
+        	    ArrayList<String> aLines = new ArrayList<String>();
+        	    aLines.add(gui.editClientNickname.getText().trim());
+        	    aLines.add(gui.editServerIP.getText().trim());
+        	    aLines.add(gui.editServerPort.getText().trim());
+				gui.client.writeSmallTextFile(aLines, "config.cfg");
+			} catch (IOException e) {
+				// do nothing
+				e.printStackTrace();
+			};
+			
+		}
+	};
+	
+	actionListenerEinstellungenLaden = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			File file =new File("config.cfg");
+			 
+    	    //if file doesnt exists, then create it
+    	    if(!file.exists()){
+    	    	try {
+					file.createNewFile();
+				} catch (IOException e) {
+					// do nothing
+					e.printStackTrace();
+				}
+    	    }
+    	    
+    	    ArrayList<String> aLines = new ArrayList<String>();
+    	    
+    	    try {
+				aLines = (ArrayList<String>) gui.client.readSmallTextFile("config.cfg");
+				gui.editClientNickname.setText(aLines.get(0));
+				gui.editServerIP.setText(aLines.get(1));
+				gui.editServerPort.setText(aLines.get(2));
+				
+			} catch (IOException e) {
+				// do nothing
+				e.printStackTrace();
+			};
+			
+		}
+	};
 	
 	actionListenerButtonLogin = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
