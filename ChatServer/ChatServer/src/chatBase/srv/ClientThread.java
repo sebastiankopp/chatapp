@@ -89,8 +89,7 @@ class ClientThread extends Thread {
 	}
 	void writeWhoIsIn(){
 		List<String> wholist = new LinkedList<String>();
-		server.map.forEach((Long ii, ClientThread dd) -> 
-			wholist.add((ii+1) + ") " + dd.getUsername() + " since " + dd.date));
+		server.map.forEach((Long ii, ClientThread dd) ->  wholist.add(dd.getUsername()));
 		ChatMessageWhoisin wiimsg = new ChatMessageWhoisin(ChatMessage.WHOISIN, wholist);
 		writeMsg(wiimsg);
 	}
