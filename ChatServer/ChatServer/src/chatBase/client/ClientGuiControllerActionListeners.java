@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import chatBase.model.ChatMessage;
 import chatBase.model.ChatMessageMessage;
@@ -33,13 +34,13 @@ public class ClientGuiControllerActionListeners {
     	    	try {
 					file.createNewFile();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					// do nothing
 					e.printStackTrace();
 				}
     	    }
     	    
     	    try {
-        	    ArrayList<String> aLines = new ArrayList<String>();
+        	    List<String> aLines = new ArrayList<String>();
         	    aLines.add(gui.editClientNickname.getText().trim());
         	    aLines.add(gui.editServerIP.getText().trim());
         	    aLines.add(gui.editServerPort.getText().trim());
@@ -66,10 +67,10 @@ public class ClientGuiControllerActionListeners {
 				}
     	    }
     	    
-    	    ArrayList<String> aLines = new ArrayList<String>();
+    	    List<String> aLines = new ArrayList<String>();
     	    
     	    try {
-				aLines = (ArrayList<String>) gui.client.readSmallTextFile("config.cfg");
+				aLines = (List<String>) gui.client.readSmallTextFile("config.cfg");
 				gui.editClientNickname.setText(aLines.get(0));
 				gui.editServerIP.setText(aLines.get(1));
 				gui.editServerPort.setText(aLines.get(2));
