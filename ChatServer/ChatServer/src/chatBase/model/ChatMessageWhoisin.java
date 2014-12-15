@@ -1,6 +1,6 @@
 package chatBase.model;
 
-import javax.swing.JList;
+import java.util.List;
 /*
  * This class defines the different type of messages that will be exchanged between the
  * Clients and the Server. 
@@ -27,16 +27,16 @@ public class ChatMessageWhoisin extends ChatMessage {
 	// LOGOUT to disconnect from the Server
 	//public static final int WHOISIN = 0, MESSAGE = 1, LOGOUT = 2, ADVERTISEMENT = 3;
 	//private int type;
-	private JList<String> kontaktliste;
+	private List<String> kontaktliste;
 	
 	// constructor
-	public ChatMessageWhoisin(int type, JList<String> kontaktliste) {
+	public ChatMessageWhoisin(int type, List<String> kontaktliste) {
 		super(type);
 		this.kontaktliste = kontaktliste;
 	}
 	
 	// getters
-	public JList<String> getKontaktListe() {
+	public List<String> getKontaktListe() {
 		return kontaktliste;
 	}
 }

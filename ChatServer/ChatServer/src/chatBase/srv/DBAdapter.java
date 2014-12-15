@@ -68,20 +68,21 @@ public class DBAdapter {
 		} else throw new SQLException("Connection could not be established");
 	}
 	/**
-	 * Dient der Authentifizierung und beim Passwortwechsel eines Nutzers
+	 * Verifiziert die Korrektheit eines Nutzerpassworts
 	 * @param username Nutzername
-	 * @return Hash des Nutzerpassworts (SHA-256)
+	 * @return Korrektheit des Passworts, im Fehlerfall bzw. bei Nichtexistenz des Users <code>false</code>
 	 */
-	public String getPwHash(String username){
+	public boolean verifyUsr(String username, String pw){
+		String pwxhash = pwh.createHash(pw);
 		try {
 			PreparedStatement pst = con.prepareStatement(VALIDATE_USR);
 			ResultSet rs = pst.executeQuery();
 			if (rs.next())
-				return rs.getString(1);
-			else return null;
+				return rs.getString(1).equals(pwxhash);
+			else return false;
 		} catch (SQLException e) {
 			srv.logStackTrace(e);
-			return null;
+			return false;
 		}
 	}
 	/**
