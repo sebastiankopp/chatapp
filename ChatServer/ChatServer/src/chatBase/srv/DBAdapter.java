@@ -7,13 +7,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-
+/**
+ * Klasse mit alleiniger Herrschaft über die Nutzerdatenbank der Chatanwendung
+ * Dient dem Hinzufügen, Löschen, Verifizieren von Nutzern und dem Passwortändern
+ * @author Sebastian Kopp
+ *
+ */
 public class DBAdapter {
 	private Connection con;
 	private static final String CREATE_TABLE = "Create table if not exists chatusers (username varchar(100) not null primary key, passwd_hash varchar(255) not null);";
 	private static final String VALIDATE_USR = "Select passwd_hash from chat_users where username = ?;";
 	private static final String ADD_USR = "Insert into chatuser (username, passwd_hash) values (?,?);";
 	private static final String SET_PW = "Update chatusers set passwd_hash = ? where username = ?;";
+	private static final String DEL_USR = "Delete from chatuser where username = ?;";
 	private static final String SEE_USRS = "Select username from chatusers;";
 	private static final String DRIVER_CLASS = "org.h2.Driver";
 	private static final String DB_CON_URL = "jdbc:h2:./chatdb";
@@ -23,6 +29,10 @@ public class DBAdapter {
 	private PWHasher pwh;
 	private static DBAdapter instance = null;
 	private Server srv;
+	/**
+	 * 
+	 * @return Instanz der Singletonklasse DBAdapter
+	 */
 	public static DBAdapter getInstance(){
 		if (instance == null)
 			instance = new DBAdapter();
@@ -40,6 +50,12 @@ public class DBAdapter {
 			srv.logMessage("Fatal error. Connection could not be established");
 		}
 	}
+	/**
+	 * Verbindung mit mehreren Versuchen erzeugen
+	 * @param tries Anz Versuche
+	 * @return Verbindung mit der DB
+	 * @throws SQLException
+	 */
 	private Connection getConnection(int tries) throws SQLException{
 		if (tries > 0){
 			try {
@@ -51,6 +67,11 @@ public class DBAdapter {
 			}
 		} else throw new SQLException("Connection could not be established");
 	}
+	/**
+	 * Dient der Authentifizierung und beim Passwortwechsel eines Nutzers
+	 * @param username Nutzername
+	 * @return Hash des Nutzerpassworts (SHA-256)
+	 */
 	public String getPwHash(String username){
 		try {
 			PreparedStatement pst = con.prepareStatement(VALIDATE_USR);
@@ -63,6 +84,12 @@ public class DBAdapter {
 			return null;
 		}
 	}
+	/**
+	 *  Nutzer (durch Admin) hinzufügen
+	 * @param name Nutzername
+	 * @param pwplain Passwort (Klartext)
+	 * @return Erfolg der Operation
+	 */
 	public boolean addUser (String name, String pwplain){
 		try {
 			PreparedStatement pst = con.prepareStatement(ADD_USR);
@@ -77,6 +104,10 @@ public class DBAdapter {
 			return false;
 		}
 	}
+	/**
+	 * 
+	 * @return Namen aller User des Chatsystems
+	 */
 	public List<String> listUsers(){
 		List<String> rc = new LinkedList<String>();
 		try {
@@ -88,6 +119,12 @@ public class DBAdapter {
 		}
 		return rc;
 	}
+	/**
+	 * Passwort eines Nutzers ändern
+	 * @param username Nutzername
+	 * @param pwplain Klartext des gewünschten Neupassworts
+	 * @return Erfolg der Operation
+	 */
 	public boolean changePW(String username, String pwplain){
 		try {
 			PreparedStatement pst = con.prepareStatement(SET_PW);
@@ -102,8 +139,23 @@ public class DBAdapter {
 			return false;
 		}
 	}
-	public boolean deleteUser(String nickname){
-		return false;
+	/**
+	 * Nutzer aus DB transaktional löschen
+	 * @param username Nutzername
+	 * @return Erfolg der Operation
+	 */
+	public boolean deleteUser(String username){
+		try {
+			PreparedStatement pst = con.prepareStatement(DEL_USR);
+			pst.setString(1, username);
+			pst.executeUpdate();
+			con.commit();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			doRollback();
+			return false;
+		}
 	}
 	private void doRollback (){doRollback(DEFAULT_ROLLBACK_TRIES);}
 	private void doRollback(int tries){
