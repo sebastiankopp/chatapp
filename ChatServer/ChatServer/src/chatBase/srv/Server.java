@@ -8,6 +8,9 @@ import java.time.LocalDateTime;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
+import chatBase.model.ChatMessage;
+import chatBase.model.ChatMessageMessage;
+
 /*
  * The server that can be run both as a console application or a GUI
  */
@@ -93,7 +96,8 @@ public class Server {
 		// we loop in reverse order in case we would have to remove a Client
 		// because it has disconnected
 		map.forEach((Long ii, ClientThread dd) ->{
-			boolean rc= dd.writeMsg(messageWithDT);
+			ChatMessageMessage msgx = new ChatMessageMessage(ChatMessage.MESSAGE, messageWithDT);
+			boolean rc= dd.writeMsg(msgx);
 			if (!rc){
 				map.remove(ii);
 				logMessage("Client " + dd.getUsername() + " was disconnected and removed from the list.");

@@ -5,9 +5,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 
 import chatBase.model.ChatMessage;
 import chatBase.model.ChatMessageMessage;
+import chatBase.model.ChatMessageWhoisin;
 
 /** One instance of this thread will run for each client */
 class ClientThread extends Thread {
@@ -76,10 +79,10 @@ class ClientThread extends Thread {
 				keepGoing = false;
 				break;
 			case ChatMessage.WHOISIN:
-				writeMsg("List of the users connected at " + LocalDateTime.now().toString()+ "\n");
-				// scan al the users connected
+				List<String> wholist = new LinkedList<String>();
 				server.map.forEach((Long ii, ClientThread dd) -> 
-					writeMsg((ii+1) + ") " + dd.getUsername() + " since " + dd.date));
+					wholist.add((ii+1) + ") " + dd.getUsername() + " since " + dd.date));
+				ChatMessageWhoisin wiimsg = new ChatMessageWhoisin(ChatMessage.WHOISIN, wholist);
 				break;
 			}
 		}
@@ -113,22 +116,30 @@ class ClientThread extends Thread {
 	//TODO Der String muss durch ChatMessage ersetzt werden und der Client muss ebenso prüfen welche Art von Message es ist, damit MESSAGE, WHOISIN und ADVERT unterschieden werden können
 	//Eigentlich muss das, was jetzt der Client macht der Server auch machen und umgekehrt
 	
-	boolean writeMsg(String msg) {
+	boolean writeMsg(ChatMessage msg) {
 		// if Client is still connected send the message to it
 		if(!getSocket().isConnected()) {
 			close();
 			return false;
 		}
-		// write the message to the stream
+		// write the message to the stream	// 
 		try {
-			getsOutput().writeObject(new ChatMessageMessage(ChatMessage.MESSAGE, msg));
+			getsOutput().writeObject(msg);
 		} catch(IOException e) {
 			server.logMessage("Error sending message to " + getUsername());
 			server.logStackTrace(e);
 		}
 		return true;
 	}
-
+//	boolean writeMsgWhoIsIn(List<String> users){
+//		if (!getSocket().isConnected()){
+//			close();
+//			return false;
+//		}
+//		try{
+//			
+//		} catch (Exception e){
+//	}
 	/**
 	 * @return the sInput
 	 */
