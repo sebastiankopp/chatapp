@@ -33,6 +33,7 @@ public class ClientGuiActionListeners {
 
 			//genug Infos hierfür:
 			gui.client = new Client(serverIP, intServerPort, nickname, gui);
+			gui.adCli.startAdv(serverIP, (intServerPort+2));
 
 			if(gui.client.start()) {
 				
@@ -69,6 +70,8 @@ public class ClientGuiActionListeners {
 			gui.editServerIP.setEditable(true);
 			gui.editServerPort.setEditable(true);
 			gui.editClientNickname.setEditable(true);
+			
+			gui.adCli.stopAdv();
 		}
 	}; 
 	

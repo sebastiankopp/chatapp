@@ -49,6 +49,7 @@ class ClientGuiView {
 	
 	// Werbung (bisl Geld verdienen :-) )
 	JTextArea memoWerbung = new JTextArea();
+	AdClient adCli;
 	
 	// MenuBar
 	 JMenuBar createMenuBar() {
@@ -200,6 +201,7 @@ class ClientGuiView {
 	public ClientGuiView() {
 		super();
 		clientguiAL = new ClientGuiActionListeners(this);
+		adCli = new AdClient(memoWerbung);
 		createFrame();
 	}
 
