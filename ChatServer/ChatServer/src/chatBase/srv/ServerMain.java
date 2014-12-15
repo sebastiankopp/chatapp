@@ -32,7 +32,7 @@ public class ServerMain {
 						ffms, 16, WerbeSender.DEFAULT_UPD_INTERVAL));
 				ws.addAdvertisement(new Advertisement("privates Weekend-Bahnhofs-Shuttle mit Großraumlimosine: Fahrt ab 1,20€/Person*\n" +
 						"*Preis gilt für 6 Pers. / 1,40€ bei 5 Pers. / 1,70€ bei 4 Pers. / 2,20€ bei 3 Pers.", ffms, 14, WerbeSender.DEFAULT_UPD_INTERVAL));
-				ws.addAdvertisement(new Advertisement("Spenden Sie für dieses Projekt oder für die Stiftung \"mehr Geld für mich\""+
+				ws.addAdvertisement(new Advertisement("Spenden Sie für dieses Projekt oder für die Stiftung \"mehr Geld für mich\"\n"+
 						"Barzahlung, Überweisung, Paypal akzeptiert.", ffms, 14, WerbeSender.DEFAULT_UPD_INTERVAL));
 			} catch (Exception e) {return;}
 		}).start();
