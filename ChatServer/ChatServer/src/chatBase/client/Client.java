@@ -1,9 +1,11 @@
 package chatBase.client;
 
 import java.net.*;
+import java.time.LocalDateTime;
 import java.io.*;
 
 import chatBase.model.ChatMessage;
+
 
 public class Client  {
 
@@ -70,7 +72,7 @@ public class Client  {
 	}
 
 	/*
-	 * To send a message to the console or the GUI
+	 * To send to GUI
 	 */
 	private void display(String msg) {
 			cgv.appendMemoVerlauf(msg + "\n");		// append zu ClientGUIView JTextArea
@@ -112,9 +114,16 @@ public class Client  {
 		public void run() {
 			while(true) {
 				try {
-					String msg = (String) sInput.readObject();
+					ChatMessage cmMsg = (ChatMessage) sInput.readObject();
 					//message ausgeben
-						cgv.appendMemoVerlauf(msg);
+						switch(cmMsg.getType()) {
+						case ChatMessage.MESSAGE:
+							cgv.appendMemoVerlauf(cmMsg.getMessage());
+							break;
+						case ChatMessage.WHOISIN:
+							//noch nicht implementiert
+							break;
+						}
 				}
 				catch(IOException e) {
 					display("Server hat Verbindung geschlossen: " + e);

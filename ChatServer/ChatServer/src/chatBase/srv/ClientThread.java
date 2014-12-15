@@ -118,7 +118,7 @@ class ClientThread extends Thread {
 		}
 		// write the message to the stream
 		try {
-			getsOutput().writeObject(msg);
+			getsOutput().writeObject(new ChatMessage(ChatMessage.MESSAGE, msg));
 		} catch(IOException e) {
 			server.logMessage("Error sending message to " + getUsername());
 			server.logStackTrace(e);
