@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.time.LocalDateTime;
 
 import chatBase.model.ChatMessage;
+import chatBase.model.ChatMessageMessage;
 
 /** One instance of this thread will run for each client */
 class ClientThread extends Thread {
@@ -62,10 +63,12 @@ class ClientThread extends Thread {
 				break;				
 			}
 			// the messaage part of the ChatMessage
-			String message = cm.getMessage();
+			String message = "";
 			// Switch on the type of message receive
 			switch(cm.getType()) {
 			case ChatMessage.MESSAGE:
+				ChatMessageMessage cmm = (ChatMessageMessage) cm; //cast is OK cause type is message
+				message = cmm.getMessage();
 				this.server.broadcast(getUsername() + ": " + message);
 				break;
 			case ChatMessage.LOGOUT:
@@ -118,7 +121,7 @@ class ClientThread extends Thread {
 		}
 		// write the message to the stream
 		try {
-			getsOutput().writeObject(new ChatMessage(ChatMessage.MESSAGE, msg));
+			getsOutput().writeObject(new ChatMessageMessage(ChatMessage.MESSAGE, msg));
 		} catch(IOException e) {
 			server.logMessage("Error sending message to " + getUsername());
 			server.logStackTrace(e);

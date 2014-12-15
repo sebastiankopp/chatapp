@@ -4,6 +4,7 @@ import java.net.*;
 import java.io.*;
 
 import chatBase.model.ChatMessage;
+import chatBase.model.ChatMessageMessage;
 
 
 public class ClientController  {
@@ -78,7 +79,7 @@ public class ClientController  {
 	}
 	
 	// sende message zu server
-	void sendMessage(ChatMessage msg) {
+	protected void sendMessage(ChatMessage msg) {
 		try {
 			sOutput.writeObject(msg);
 		}
@@ -117,7 +118,8 @@ public class ClientController  {
 					//message ausgeben
 						switch(cmMsg.getType()) {
 						case ChatMessage.MESSAGE:
-							cgv.appendMemoVerlauf(cmMsg.getMessage());
+							ChatMessageMessage cmm = (ChatMessageMessage) cmMsg; //cast is OK cause type is message
+							cgv.appendMemoVerlauf(cmm.getMessage());
 							break;
 						case ChatMessage.WHOISIN:
 							//noch nicht implementiert

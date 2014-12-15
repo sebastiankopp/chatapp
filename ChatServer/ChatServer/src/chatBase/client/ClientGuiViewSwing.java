@@ -25,34 +25,34 @@ import javax.swing.SwingConstants;
 class ClientGuiViewSwing {
 
 	// Frame Main
-	JFrame frameMain;
-	ClientGuiControllerActionListeners clientguiAL;
+	private JFrame frameMain;
+	private ClientGuiControllerActionListeners clientguiAL;
 	
 	// Chat
-	JTextArea memoVerlauf = new JTextArea();
-	JTextArea memoChat = new JTextArea();
-	JButton buttonSenden = new JButton("Senden");
-	ClientController client;
+	protected JTextArea memoVerlauf = new JTextArea();
+	protected JTextArea memoChat = new JTextArea();
+	protected JButton buttonSenden = new JButton("Senden");
+	protected ClientController client;
 	
 	// Config
-	JTextField editServerIP = new JTextField();
-	JTextField editServerPort = new JTextField();
-	JTextField editClientNickname = new JTextField();
+	protected JTextField editServerIP = new JTextField();
+	protected JTextField editServerPort = new JTextField();
+	protected JTextField editClientNickname = new JTextField();
 	
 	// Login
-	JButton buttonLogin = new JButton("Anmeldung am Server");
-	JButton buttonLogout = new JButton("Abmeldung vom Server");
-    boolean istVerbunden = false;
+	protected JButton buttonLogin = new JButton("Anmeldung am Server");
+	protected JButton buttonLogout = new JButton("Abmeldung vom Server");
+	protected boolean istVerbunden = false;
 	
 	// Kontakte
-	JList<String> listKontakte = new JList<String>();
+	protected JList<String> listKontakte = new JList<String>();
 	
 	// Werbung (bisl Geld verdienen :-) )
-	JTextArea memoWerbung = new JTextArea();
-	AdClientController adCli;
+	private JTextArea memoWerbung = new JTextArea();
+	protected AdClientController adCli;
 	
 	// MenuBar
-	 JMenuBar createMenuBar() {
+	private JMenuBar createMenuBar() {
 		JMenuBar menuBar = new JMenuBar();
 		JMenu menuEinstellungen = new JMenu("Einstellungen");
 		menuBar.add(menuEinstellungen);
@@ -63,7 +63,7 @@ class ClientGuiViewSwing {
 		return menuBar;
 	}
 	 
-	 void setFixSizeOfComponent(JComponent comp, int width, int height){
+	private void setFixSizeOfComponent(JComponent comp, int width, int height){
 		 Dimension d = new Dimension(width, height);
 		 comp.setSize(d);
 		 comp.setMinimumSize(d);
@@ -71,7 +71,7 @@ class ClientGuiViewSwing {
 		 comp.setPreferredSize(d);
 	 }
 	 
-	 JPanel createChatPanel() {
+	private JPanel createChatPanel() {
 		 JPanel panel = new JPanel();
 		 panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		 setFixSizeOfComponent(panel, 500, 400);
@@ -106,7 +106,7 @@ class ClientGuiViewSwing {
 		 return panel;
 	 }
 	 
-	 JPanel createConfigPanel(){
+	private JPanel createConfigPanel(){
 		 JPanel panelOuter = new JPanel();
 		 panelOuter.setLayout(new BoxLayout(panelOuter, BoxLayout.X_AXIS));
 		 setFixSizeOfComponent(panelOuter, 200, 400);
@@ -153,7 +153,7 @@ class ClientGuiViewSwing {
 		 return panelOuter;
 	 }
 
-	 JPanel createAdvertPanel(){
+	private JPanel createAdvertPanel(){
 		 JPanel panel = new JPanel();
 		 panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		 setFixSizeOfComponent(panel, 700, 100);
@@ -163,7 +163,7 @@ class ClientGuiViewSwing {
 	 }
 	 
 	// Frame Main
-	 void createFrame() {
+	private  void createFrame() {
 		frameMain = new JFrame("Chat-App pre-alpha");
 		frameMain.setLayout(new BorderLayout());
 		
@@ -214,12 +214,12 @@ class ClientGuiViewSwing {
 		frameMain.dispose();
 	}
 	
-	public void appendMemoVerlauf(String str) {
+	protected void appendMemoVerlauf(String str) {
 		memoVerlauf.append(str);
 		memoVerlauf.setCaretPosition(memoVerlauf.getText().length() - 1);
 	}
 	
-	public void verbindungsfehler() {
+	protected void verbindungsfehler() {
 		buttonLogin.setEnabled(true);
 		buttonLogout.setEnabled(false);
 		setStandard();
@@ -233,7 +233,7 @@ class ClientGuiViewSwing {
 		istVerbunden = false;
 	}
 	
-	public void setStandard(){
+	private void setStandard(){
 		// später durch autoload von einstellungen ersetzen (Feature 3)
 		editServerIP.setText("127.0.0.1");
 		editServerPort.setText("1500");

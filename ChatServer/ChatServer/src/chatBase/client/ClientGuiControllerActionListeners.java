@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import chatBase.model.ChatMessage;
+import chatBase.model.ChatMessageMessage;
 
 public class ClientGuiControllerActionListeners {
 	
@@ -53,7 +54,7 @@ public class ClientGuiControllerActionListeners {
 	actionListenerButtonSenden = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (gui.istVerbunden){
-	gui.client.sendMessage(new ChatMessage(ChatMessage.MESSAGE, gui.memoChat.getText()));				
+	gui.client.sendMessage(new ChatMessageMessage(ChatMessage.MESSAGE, gui.memoChat.getText()));				
 	gui.memoChat.setText("");}
 			//else nix machen
 		}
@@ -62,7 +63,7 @@ public class ClientGuiControllerActionListeners {
 	actionListenerButtonLogout = new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {	
-			gui.client.sendMessage(new ChatMessage(ChatMessage.LOGOUT, ""));
+			gui.client.sendMessage(new ChatMessage(ChatMessage.LOGOUT));
 			
 			gui.buttonLogin.setEnabled(true);
 			gui.buttonLogout.setEnabled(false);
