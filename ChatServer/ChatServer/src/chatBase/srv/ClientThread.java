@@ -78,12 +78,8 @@ class ClientThread extends Thread {
 				server.logMessage(getUsername() + " disconnected with a LOGOUT message.");
 				keepGoing = false;
 				break;
-			case ChatMessage.WHOISIN:
-				List<String> wholist = new LinkedList<String>();
-				server.map.forEach((Long ii, ClientThread dd) -> 
-					wholist.add((ii+1) + ") " + dd.getUsername() + " since " + dd.date));
-				ChatMessageWhoisin wiimsg = new ChatMessageWhoisin(ChatMessage.WHOISIN, wholist);
-				break;
+			
+				
 			}
 		}
 		// remove myself from the arrayList containing the list of the
@@ -91,7 +87,13 @@ class ClientThread extends Thread {
 		this.server.remove(id);
 		close();
 	}
-	
+	void writeWhoIsIn(){
+		List<String> wholist = new LinkedList<String>();
+		server.map.forEach((Long ii, ClientThread dd) -> 
+			wholist.add((ii+1) + ") " + dd.getUsername() + " since " + dd.date));
+		ChatMessageWhoisin wiimsg = new ChatMessageWhoisin(ChatMessage.WHOISIN, wholist);
+		writeMsg(wiimsg);
+	}
 	// try to close everything
 	private void close() {
 		// try to close the connection

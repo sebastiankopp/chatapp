@@ -47,8 +47,9 @@ public class Server {
 				Socket socket = serverSocket.accept();  	// accept connection
 				long clntThrId = System.currentTimeMillis();
 				if (!keepGoing) break;
-				ClientThread ct = new ClientThread(this, socket, clntThrId);  // make a thread of it
-				map.put(clntThrId, ct);									// save it in the ArrayList
+				ClientThread ct = new ClientThread(this, socket, clntThrId); 
+				map.put(clntThrId, ct);	
+				map.forEach((Long l, ClientThread cthr) -> cthr.writeWhoIsIn()); // An alle beim login sagen, wer drin ist.
 				ct.start();
 			}
 			serverSocket.close();
@@ -101,6 +102,7 @@ public class Server {
 			if (!rc){
 				map.remove(ii);
 				logMessage("Client " + dd.getUsername() + " was disconnected and removed from the list.");
+				map.forEach((Long l, ClientThread cthr) -> cthr.writeWhoIsIn());
 			}
 		});
 	}
@@ -108,6 +110,7 @@ public class Server {
 	synchronized void remove(long id) {
 		// scan the array list until we found the Id
 		map.remove(id);
+		map.forEach((Long l, ClientThread cthr) -> cthr.writeWhoIsIn()); // Beim Logout allen mitteilen, wer drin ist
 	}
 	public LoggingDaemon getLd() {
 		// TODO Auto-generated method stub
