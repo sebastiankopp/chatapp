@@ -5,14 +5,14 @@ import java.awt.event.ActionListener;
 
 import chatBase.model.ChatMessage;
 
-public class ClientGuiActionListeners {
+public class ClientGuiControllerActionListeners {
 	
-	private ClientGuiView gui;
+	private ClientGuiViewSwing gui;
 	public ActionListener actionListenerButtonLogout;
 	public ActionListener actionListenerButtonLogin;
 	public ActionListener actionListenerButtonSenden;
 	
-	public ClientGuiActionListeners(ClientGuiView clientGuiView) {
+	public ClientGuiControllerActionListeners(ClientGuiViewSwing clientGuiView) {
 		gui = clientGuiView;
 	
 
@@ -32,7 +32,7 @@ public class ClientGuiActionListeners {
 			}
 
 			//genug Infos hierfür:
-			gui.client = new Client(serverIP, intServerPort, nickname, gui);
+			gui.client = new ClientController(serverIP, intServerPort, nickname, gui);
 			gui.adCli.startAdv(serverIP, (intServerPort+2));
 
 			if(gui.client.start()) {

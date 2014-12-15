@@ -22,17 +22,17 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 
-class ClientGuiView {
+class ClientGuiViewSwing {
 
 	// Frame Main
 	JFrame frameMain;
-	ClientGuiActionListeners clientguiAL;
+	ClientGuiControllerActionListeners clientguiAL;
 	
 	// Chat
 	JTextArea memoVerlauf = new JTextArea();
 	JTextArea memoChat = new JTextArea();
 	JButton buttonSenden = new JButton("Senden");
-	Client client;
+	ClientController client;
 	
 	// Config
 	JTextField editServerIP = new JTextField();
@@ -49,7 +49,7 @@ class ClientGuiView {
 	
 	// Werbung (bisl Geld verdienen :-) )
 	JTextArea memoWerbung = new JTextArea();
-	AdClient adCli;
+	AdClientController adCli;
 	
 	// MenuBar
 	 JMenuBar createMenuBar() {
@@ -198,10 +198,10 @@ class ClientGuiView {
 		frameMain.pack();
 	}
 	 
-	public ClientGuiView() {
+	public ClientGuiViewSwing() {
 		super();
-		clientguiAL = new ClientGuiActionListeners(this);
-		adCli = new AdClient(memoWerbung);
+		clientguiAL = new ClientGuiControllerActionListeners(this);
+		adCli = new AdClientController(memoWerbung);
 		createFrame();
 	}
 

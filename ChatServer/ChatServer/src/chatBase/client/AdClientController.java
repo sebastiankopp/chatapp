@@ -20,7 +20,7 @@ import de.root1.simon.exceptions.LookupFailedException;
  * @author Sebastian Kopp
  *
  */
-public class AdClient extends Thread {
+public class AdClientController extends Thread {
 	private JTextArea target;
 //	private static final int UPD_INTERVAL = 10000; // Werbeupdateintervall
 	private Gson gs;
@@ -31,7 +31,7 @@ public class AdClient extends Thread {
 	 * Konstruktor wird nur bei der GUI-Instanzziierung aufgerufen
 	 * @param target JTextArea, die mit Werbung versehen werden soll
 	 */
-	public AdClient(JTextArea target){
+	public AdClientController(JTextArea target){
 		this.target = target;
 		gs = new Gson();
 		this.target.setAlignmentX(JTextArea.CENTER_ALIGNMENT);

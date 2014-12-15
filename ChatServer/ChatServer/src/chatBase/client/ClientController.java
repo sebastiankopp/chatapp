@@ -1,25 +1,24 @@
 package chatBase.client;
 
 import java.net.*;
-import java.time.LocalDateTime;
 import java.io.*;
 
 import chatBase.model.ChatMessage;
 
 
-public class Client  {
+public class ClientController  {
 
 	// for I/O
 	private ObjectInputStream sInput;		// to read from the socket
 	private ObjectOutputStream sOutput;		// to write on the socket
 	private Socket socket;
 
-	private ClientGuiView cgv;
+	private ClientGuiViewSwing cgv;
 	private String server, username;
 	private int port;
 
 
-	Client(String server, int port, String username, ClientGuiView cg) {
+	ClientController(String server, int port, String username, ClientGuiViewSwing cg) {
 		this.server = server;
 		this.port = port;
 		this.username = username;
