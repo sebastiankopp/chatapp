@@ -39,6 +39,6 @@ public class ServerMain {
 //			ac.startAdv("localhost", portNumber+2);
 //			JOptionPane.showMessageDialog(null, jta);
 //		}).start();		
-		srv.performInfiniteLoop();
+		srv.doRun();
 	}
 }

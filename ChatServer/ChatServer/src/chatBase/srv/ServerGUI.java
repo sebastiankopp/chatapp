@@ -131,7 +131,7 @@ public class ServerGUI extends JFrame implements ActionListener, WindowListener 
 	 */
 	class ServerRunning extends Thread {
 		public void run() {
-			server.performInfiniteLoop();         // should execute until if fails
+			server.doRun();         // should execute until if fails
 			// the server failed
 			stopStart.setText("Start");
 			tPortNumber.setEditable(true);

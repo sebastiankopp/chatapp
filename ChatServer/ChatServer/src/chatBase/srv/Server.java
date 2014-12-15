@@ -31,7 +31,7 @@ public class Server {
 		this.ld = new LoggingDaemon(ps);
 //		maxId = 0;
 	}	
-	public void performInfiniteLoop() {
+	public void doRun() {
 		keepGoing = true;
 		/* create socket server and wait for connection requests */
 		try{
