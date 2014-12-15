@@ -12,7 +12,7 @@ import de.root1.simon.exceptions.NameBindingException;
  * @author Sebastian Kopp
  *
  */
-public class WerbeSchleuder  {
+public class WerbeSender  {
 //	private int updInterval;
 //	private int maxVal;
 	public static final int DEFAULT_UPD_INTERVAL = 10000;
@@ -20,7 +20,7 @@ public class WerbeSchleuder  {
 	public static final String AD_BINDING = "werbeserver";
 	private Registry reg;
 //	private SimonWerbeServerImpl swsim;
-	public WerbeSchleuder(int port) throws UnknownHostException, IOException, NameBindingException{
+	public WerbeSender(int port) throws UnknownHostException, IOException, NameBindingException{
 //		updInterval = interval;
 		ads = new Vector<Advertisement>();
 		reg = Simon.createRegistry(port);

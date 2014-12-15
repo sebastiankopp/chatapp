@@ -16,7 +16,7 @@ import de.root1.simon.annotation.SimonRemote;
 class SimonWerbeServerImpl implements SimonWerbeServerInterface {
 	private Vector<Advertisement> ads;
 	private Gson gs;
-	public SimonWerbeServerImpl(WerbeSchleuder ws) {
+	public SimonWerbeServerImpl(WerbeSender ws) {
 		gs = new Gson();
 		this.ads = ws.getAds();
 	}

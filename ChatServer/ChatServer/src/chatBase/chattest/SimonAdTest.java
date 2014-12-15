@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import chatBase.model.Advertisement;
 import chatBase.srv.SimonWerbeServerInterface;
-import chatBase.srv.WerbeSchleuder;
+import chatBase.srv.WerbeSender;
 import de.root1.simon.Lookup;
 import de.root1.simon.NameLookup;
 import de.root1.simon.Simon;
@@ -19,15 +19,15 @@ import de.root1.simon.exceptions.LookupFailedException;
 import de.root1.simon.exceptions.NameBindingException;
 public class SimonAdTest {
 	private static final int AD_TEST_PORT = 22222;
-	private WerbeSchleuder ws;
+	private WerbeSender ws;
 	private Lookup nlu;
 	private SimonWerbeServerInterface swsint;
 	@Before
 	public void pullUp(){
 		try {
-			ws = new WerbeSchleuder(AD_TEST_PORT);
+			ws = new WerbeSender(AD_TEST_PORT);
 			nlu = Simon.createNameLookup("127.0.0.1", AD_TEST_PORT);
-			swsint = (SimonWerbeServerInterface) nlu.lookup(WerbeSchleuder.AD_BINDING);
+			swsint = (SimonWerbeServerInterface) nlu.lookup(WerbeSender.AD_BINDING);
 		} catch (IOException | NameBindingException | LookupFailedException | EstablishConnectionFailed e) {
 			fail(e.getMessage());
 		}

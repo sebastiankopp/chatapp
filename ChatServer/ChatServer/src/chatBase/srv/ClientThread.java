@@ -17,18 +17,16 @@ class ClientThread extends Thread {
 	/**
 	 * 
 	 */
-	private Server server;
+	private Server srv;
 	private Socket socket;// the socket where to listen/talk
-	private ObjectInputStream sInput;
-	private ObjectOutputStream sOutput;
+	private ObjectInputStream ois;
+	private ObjectOutputStream oos;
 	private long id; // my unique id (easier for disconnection)
 	private String username;
 	private ChatMessage cm; // received msg
-	private String date; // Verbindungsdatum
-
 	// Constructore
 	public ClientThread(Server server, Socket socket, long id) {
-		this.server = server;
+		this.srv = server;
 		// a unique id
 		this.id = id;
 		this.setSocket(socket);
@@ -49,7 +47,6 @@ class ClientThread extends Thread {
 		// have to catch ClassNotFoundException
 		// but I read a String, I am sure it will work
 		catch (ClassNotFoundException e) {}
-        date = LocalDateTime.now().toString() + "\n";
 	}
 
 	// what will run forever
@@ -61,8 +58,8 @@ class ClientThread extends Thread {
 			try {
 				cm = (ChatMessage) getsInput().readObject();
 			} catch (IOException | ClassNotFoundException e) {
-				server.logMessage(getUsername() + " Exception reading Streams: " + e);
-				server.logStackTrace(e);
+				srv.logMessage(getUsername() + " Exception reading Streams: " + e);
+				srv.logStackTrace(e);
 				break;				
 			}
 			// the messaage part of the ChatMessage
@@ -72,10 +69,10 @@ class ClientThread extends Thread {
 			case ChatMessage.MESSAGE:
 				ChatMessageMessage cmm = (ChatMessageMessage) cm; //cast is OK cause type is message
 				message = cmm.getMessage();
-				this.server.broadcast(getUsername() + ": " + message);
+				this.srv.sendToAll(getUsername() + ": " + message);
 				break;
 			case ChatMessage.LOGOUT:
-				server.logMessage(getUsername() + " disconnected with a LOGOUT message.");
+				srv.logMessage(getUsername() + " disconnected with a LOGOUT message.");
 				keepGoing = false;
 				break;
 			
@@ -84,12 +81,12 @@ class ClientThread extends Thread {
 		}
 		// remove myself from the arrayList containing the list of the
 		// connected Clients
-		this.server.remove(id);
+		this.srv.remove(id);
 		close();
 	}
 	void writeWhoIsIn(){
 		List<String> wholist = new LinkedList<String>();
-		server.map.forEach((Long ii, ClientThread dd) ->  wholist.add(dd.getUsername()));
+		srv.map.forEach((Long ii, ClientThread dd) ->  wholist.add(dd.getUsername()));
 		ChatMessageWhoisin wiimsg = new ChatMessageWhoisin(ChatMessage.WHOISIN, wholist);
 		writeMsg(wiimsg);
 	}
@@ -127,8 +124,8 @@ class ClientThread extends Thread {
 		try {
 			getsOutput().writeObject(msg);
 		} catch(IOException e) {
-			server.logMessage("Error sending message to " + getUsername());
-			server.logStackTrace(e);
+			srv.logMessage("Error sending message to " + getUsername());
+			srv.logStackTrace(e);
 		}
 		return true;
 	}
@@ -145,28 +142,28 @@ class ClientThread extends Thread {
 	 * @return the sInput
 	 */
 	public ObjectInputStream getsInput() {
-		return sInput;
+		return ois;
 	}
 
 	/**
 	 * @param sInput the sInput to set
 	 */
 	public void setsInput(ObjectInputStream sInput) {
-		this.sInput = sInput;
+		this.ois = sInput;
 	}
 
 	/**
 	 * @return the sOutput
 	 */
 	public ObjectOutputStream getsOutput() {
-		return sOutput;
+		return oos;
 	}
 
 	/**
 	 * @param sOutput the sOutput to set
 	 */
 	public void setsOutput(ObjectOutputStream sOutput) {
-		this.sOutput = sOutput;
+		this.oos = sOutput;
 	}
 
 	/**

@@ -19,7 +19,7 @@ public class Server {
 //	private int maxId;
 	TreeMap<Long, ClientThread> map; // an ArrayList to keep the list of the Client
 	private int port;// the port number to listen for connection
-	private boolean keepGoing;// the boolean that will be turned of to stop the server
+	private boolean goOn;// the boolean that will be turned of to stop the server
 	private LoggingDaemon ld;
 	private static Server instance;
 	public static Server getInstance(int port, PrintStream ps){
@@ -38,15 +38,15 @@ public class Server {
 //		maxId = 0;
 	}	
 	public void doRun() {
-		keepGoing = true;
+		goOn = true;
 		/* create socket server and wait for connection requests */
 		try{
 			ServerSocket serverSocket = new ServerSocket(port);
-			while(keepGoing) {
+			while(goOn) {
 				logMessage("Server waiting for Clients on port " + port + ".");
 				Socket socket = serverSocket.accept();  	// accept connection
 				long clntThrId = System.currentTimeMillis();
-				if (!keepGoing) break;
+				if (!goOn) break;
 				ClientThread ct = new ClientThread(this, socket, clntThrId); 
 				map.put(clntThrId, ct);	
 				map.forEach((Long l, ClientThread cthr) -> cthr.writeWhoIsIn()); // An alle beim login sagen, wer drin ist.
@@ -78,7 +78,7 @@ public class Server {
 		ld.getPw().println(LocalDateTime.now().toString() + ": " + msg);
 	}
 	public void stop() {
-		keepGoing = false;
+		goOn = false;
 		// connect to myself as Client to exit statement 
 		// Socket socket = serverSocket.accept();
 		try {
@@ -91,7 +91,7 @@ public class Server {
 	/*
 	 *  to broadcast a message to all Clients
 	 */
-	synchronized void broadcast(String message) {
+	synchronized void sendToAll(String message) {
 		String messageWithDT;
 		ld.getPw().println(messageWithDT = "\n"+LocalDateTime.now().toString() + " " + message);// log message for server
 		// we loop in reverse order in case we would have to remove a Client

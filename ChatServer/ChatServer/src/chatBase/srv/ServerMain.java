@@ -27,11 +27,11 @@ public class ServerMain {
 		new Thread(() ->{
 			try {
 				List<String> ffms = Arrays.asList("Helvetica", "Sans-serif", "Sans Serif", "Times New Roman");
-				WerbeSchleuder ws = new WerbeSchleuder(portNumber+2);
+				WerbeSender ws = new WerbeSender(portNumber+2);
 				ws.addAdvertisement(new Advertisement("Handytarif: CONGSTAR   Vertrag abschließen unter http://www.congstar.de/22507",
-						ffms, 16, WerbeSchleuder.DEFAULT_UPD_INTERVAL));
+						ffms, 16, WerbeSender.DEFAULT_UPD_INTERVAL));
 				ws.addAdvertisement(new Advertisement("privates Weekend-Bahnhofs-Shuttle mit Großraumlimosine: Fahrt ab 1,20€/Person*\n" +
-						"*Preis gilt für 6 Pers. / 1,40€ bei 5 Pers. / 1,70€ bei 4 Pers. / 2,20€ bei 3 Pers.", ffms, 14, WerbeSchleuder.DEFAULT_UPD_INTERVAL));
+						"*Preis gilt für 6 Pers. / 1,40€ bei 5 Pers. / 1,70€ bei 4 Pers. / 2,20€ bei 3 Pers.", ffms, 14, WerbeSender.DEFAULT_UPD_INTERVAL));
 			} catch (Exception e) {return;}
 		}).start();
 		// War nur ein Test

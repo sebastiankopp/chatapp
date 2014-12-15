@@ -8,7 +8,7 @@ import com.google.gson.Gson;
 
 import chatBase.model.Advertisement;
 import chatBase.srv.SimonWerbeServerInterface;
-import chatBase.srv.WerbeSchleuder;
+import chatBase.srv.WerbeSender;
 import de.root1.simon.Lookup;
 import de.root1.simon.Simon;
 import de.root1.simon.exceptions.EstablishConnectionFailed;
@@ -46,7 +46,7 @@ public class AdClientController extends Thread {
 	public void startAdv(String host, int adport){
 		try {
 			nlu = Simon.createNameLookup(host, adport);
-			swsint = (SimonWerbeServerInterface) nlu.lookup(WerbeSchleuder.AD_BINDING);
+			swsint = (SimonWerbeServerInterface) nlu.lookup(WerbeSender.AD_BINDING);
 			start();
 		} catch (UnknownHostException | LookupFailedException | EstablishConnectionFailed e) {
 			target.setText("Oh no!!");
