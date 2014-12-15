@@ -1,7 +1,5 @@
 package chatBase.model;
 
-import java.io.*;
-
 import javax.swing.JList;
 /*
  * This class defines the different type of messages that will be exchanged between the
