@@ -25,6 +25,9 @@ public class Server {
 		}
 		return Server.instance;
 	}
+	public static Server getInstance(){
+		return Server.instance;
+	}
 	private Server(int port, PrintStream ps) {
 		this.port = port;
 		map = new TreeMap<Long,ClientThread>();
