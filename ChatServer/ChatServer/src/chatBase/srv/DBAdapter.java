@@ -16,19 +16,19 @@ import java.util.List;
 public class DBAdapter {
 	private Connection con;
 	private static final String CREATE_TABLE = "Create table if not exists chatusers (username varchar(100) not null primary key, passwd_hash varchar(255) not null);";
-	private static final String VALIDATE_USR = "Select passwd_hash from chat_users where username = ?;";
-	private static final String ADD_USR = "Insert into chatuser (username, passwd_hash) values (?,?);";
+	private static final String VALIDATE_USR = "Select passwd_hash from chatusers where username = ?;";
+	private static final String ADD_USR = "Insert into chatusers (username, passwd_hash) values (?,?);";
 	private static final String SET_PW = "Update chatusers set passwd_hash = ? where username = ?;";
-	private static final String DEL_USR = "Delete from chatuser where username = ?;";
+	private static final String DEL_USR = "Delete from chatusers where username = ?;";
 	private static final String SEE_USRS = "Select username from chatusers;";
 	private static final String DRIVER_CLASS = "org.h2.Driver";
-	private static final String DB_CON_URL = "jdbc:h2:./chatdb";
+	private static final String DB_CON_URL = "jdbc:h2:./chatbasedb";
 	private static final String DB_USR = "sa";
 	private static final String DB_PW = "";
 	private static final int DEFAULT_ROLLBACK_TRIES = 5;
 	private PWHasher pwh;
 	private static DBAdapter instance = null;
-	private Server srv;
+	private Server srv = null;
 	/**
 	 * 
 	 * @return Instanz der Singletonklasse DBAdapter
@@ -46,8 +46,11 @@ public class DBAdapter {
 			con.createStatement().execute(CREATE_TABLE);
 			pwh = new PWHasher();
 		} catch (Exception e) {
-			srv.logStackTrace(e);
-			srv.logMessage("Fatal error. Connection could not be established");
+			if (srv != null) {
+				srv.logStackTrace(e);
+				srv.logMessage("Fatal error. Connection could not be established");
+			}
+			
 		}
 	}
 	/**
@@ -62,7 +65,7 @@ public class DBAdapter {
 				Class.forName(DRIVER_CLASS);
 				return DriverManager.getConnection(DB_CON_URL, DB_USR, DB_PW);
 			} catch (ClassNotFoundException | SQLException e) {
-				srv.logStackTrace(e);
+				if (srv != null) srv.logStackTrace(e);
 				return getConnection(tries-1);
 			}
 		} else throw new SQLException("Connection could not be established");
@@ -76,12 +79,14 @@ public class DBAdapter {
 		String pwxhash = pwh.createHash(pw);
 		try {
 			PreparedStatement pst = con.prepareStatement(VALIDATE_USR);
+			pst.setString(1, username);
 			ResultSet rs = pst.executeQuery();
 			if (rs.next())
 				return rs.getString(1).equals(pwxhash);
 			else return false;
 		} catch (SQLException e) {
-			srv.logStackTrace(e);
+			if (srv != null)srv.logStackTrace(e);
+			else e.printStackTrace();
 			return false;
 		}
 	}
@@ -100,7 +105,8 @@ public class DBAdapter {
 			con.commit();
 			return true;
 		} catch (Exception e) {
-			srv.logStackTrace(e);
+			if (srv != null)
+				srv.logStackTrace(e);
 			doRollback();
 			return false;
 		}
@@ -116,7 +122,7 @@ public class DBAdapter {
 			while (rs.next())
 				rc.add(rs.getString(1));
 		} catch (Exception e){
-			srv.logStackTrace(e);
+			if (srv != null)srv.logStackTrace(e);
 		}
 		return rc;
 	}
@@ -135,7 +141,7 @@ public class DBAdapter {
 			con.commit();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			if (srv != null)srv.logStackTrace(e);
 			doRollback();
 			return false;
 		}
@@ -153,7 +159,7 @@ public class DBAdapter {
 			con.commit();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			if (srv != null) srv.logStackTrace(e);
 			doRollback();
 			return false;
 		}

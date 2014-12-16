@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
-
 import chatBase.model.ChatMessage;
 import chatBase.model.ChatMessageMessage;
 import chatBase.model.ChatMessageWhoisin;
+import chatBase.model.PWChangeRequest;
+import chatBase.model.PWChangeResponse;
 
 /** One instance of this thread will run for each client */
 class ClientThread extends Thread {
@@ -21,31 +21,27 @@ class ClientThread extends Thread {
 	private Socket socket;// the socket where to listen/talk
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
-	private long id; // my unique id (easier for disconnection)
+	private long id; 
 	private String username;
+	private DBAdapter dba;
 	private ChatMessage cm; // received msg
-	// Constructore
 	public ClientThread(Server server, Socket socket, long id) {
 		this.srv = server;
-		// a unique id
+		this.dba = DBAdapter.getInstance();
 		this.id = id;
 		this.setSocket(socket);
-		/* Creating both Data Stream */
 		server.logMessage("Thread trying to create Object Input/Output Streams");
 		try {
-			// create output first
+			// zuerst Output-Socket
 			setsOutput(new ObjectOutputStream(socket.getOutputStream()));
 			setsInput(new ObjectInputStream(socket.getInputStream()));
-			// read the username
-			setUsername((String) getsInput().readObject());
+			setUsername((String) getsInput().readObject());		// TODO statt Usernamen hier künftig Login-Message empfangen
 			server.logMessage( getUsername() + " just connected.");
 		}
 		catch (IOException e) {
 			server.logStackTrace(e);
 			return;
 		}
-		// have to catch ClassNotFoundException
-		// but I read a String, I am sure it will work
 		catch (ClassNotFoundException e) {}
 	}
 
@@ -62,25 +58,30 @@ class ClientThread extends Thread {
 				srv.logStackTrace(e);
 				break;				
 			}
-			// the messaage part of the ChatMessage
-			String message = "";
-			// Switch on the type of message receive
+			// Unterscheidung nach Messagetyp
 			switch(cm.getType()) {
 			case ChatMessage.MESSAGE:
 				ChatMessageMessage cmm = (ChatMessageMessage) cm; //cast is OK cause type is message
-				message = cmm.getMessage();
+				String message = cmm.getMessage();
 				this.srv.sendToAll(getUsername() + ": " + message);
 				break;
 			case ChatMessage.LOGOUT:
-				srv.logMessage(getUsername() + " disconnected with a LOGOUT message.");
+				srv.logMessage(getUsername() + " hat sich ausgeloggt.");
 				keepGoing = false;
 				break;
-			
-				
+			case ChatMessage.CHANGE_PW:
+				PWChangeRequest pwcr = (PWChangeRequest) cm;
+				if (dba.verifyUsr(username, pwcr.getOldpw())){
+					boolean rcxx = dba.changePW(username, pwcr.getNewpw());
+					writeMsg(new PWChangeResponse(rcxx));
+					srv.logMessage(username + " hat sein PW gewechselt");
+				} else {
+					writeMsg(new PWChangeResponse(false));
+					srv.logMessage(username + " konnte sein PW nicht wechseln");
+				}
 			}
 		}
-		// remove myself from the arrayList containing the list of the
-		// connected Clients
+		// nach Ende der Schleife aus der Liste des Servers entfernen
 		this.srv.remove(id);
 		close();
 	}
@@ -90,37 +91,34 @@ class ClientThread extends Thread {
 		ChatMessageWhoisin wiimsg = new ChatMessageWhoisin(ChatMessage.WHOISIN, wholist);
 		writeMsg(wiimsg);
 	}
-	// try to close everything
+	
 	private void close() {
-		// try to close the connection
 		try {
 			if(getsOutput() != null) getsOutput().close();
-		}
-		catch(Exception e) {}
+		} catch(Exception e) {}
+		
 		try {
 			if(getsInput() != null) getsInput().close();
-		}
-		catch(Exception e) {};
+		} catch(Exception e) {};
+			
 		try {
 			if(getSocket() != null) getSocket().close();
-		}
-		catch (Exception e) {}
+		} catch (Exception e) {}
 	}
 
-	/*
-	 * Write a String to the Client output stream
-	 */
 	
-	//TODO Der String muss durch ChatMessage ersetzt werden und der Client muss ebenso prüfen welche Art von Message es ist, damit MESSAGE, WHOISIN und ADVERT unterschieden werden können
+	//done Der String muss durch ChatMessage ersetzt werden und der Client muss ebenso prüfen welche Art von Message es ist, damit MESSAGE, WHOISIN und ADVERT unterschieden werden können
 	//Eigentlich muss das, was jetzt der Client macht der Server auch machen und umgekehrt
-	
+	/**
+	 * Nachricht senden
+	 * @param msg
+	 * @return ob das Senden erfolgreich war
+	 */
 	boolean writeMsg(ChatMessage msg) {
-		// if Client is still connected send the message to it
 		if(!getSocket().isConnected()) {
 			close();
 			return false;
 		}
-		// write the message to the stream	// 
 		try {
 			getsOutput().writeObject(msg);
 		} catch(IOException e) {
@@ -129,15 +127,6 @@ class ClientThread extends Thread {
 		}
 		return true;
 	}
-//	boolean writeMsgWhoIsIn(List<String> users){
-//		if (!getSocket().isConnected()){
-//			close();
-//			return false;
-//		}
-//		try{
-//			
-//		} catch (Exception e){
-//	}
 	/**
 	 * @return the sInput
 	 */
