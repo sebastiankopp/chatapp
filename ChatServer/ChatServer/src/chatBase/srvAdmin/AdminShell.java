@@ -6,63 +6,66 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
 import java.util.Scanner;
+
+import javax.sound.midi.SysexMessage;
+
+import chatBase.srv.Server;
+import chatBase.srv.adm.AdminShellStub;
+import de.root1.simon.Lookup;
+import de.root1.simon.Simon;
+import de.root1.simon.exceptions.EstablishConnectionFailed;
+import de.root1.simon.exceptions.LookupFailedException;
 
 public class AdminShell {
 	public static final String COMMAND_DELUSER = "deluser";
 	public static final String COMMAND_ADDUSER = "adduser";
 	public static final String COMMAND_SHUTDOWN = "shutdown";
 	public static final String COMMAND_SHOWUSERS = "showusers";
-	private String f_fromsrv, f_tosrv;
-	private BufferedReader fromsrv;
-	private PrintWriter tosrv;
 	private Scanner usr;
-	public AdminShell(String infrSrv, String outtoSrv){
+	private AdminShellStub astub;
+	private Lookup nlu;
+	public AdminShell(int port){
 		usr = new Scanner(System.in);
-		f_fromsrv = infrSrv;
-		f_tosrv = outtoSrv;
 		try {
-			tosrv = new PrintWriter(new BufferedWriter(new FileWriter(f_tosrv, false)));
-		} catch (IOException e) {
+			nlu = Simon.createNameLookup("127.0.0.1", port);
+			astub = (AdminShellStub) nlu.lookup(AdminShellStub.DEFAULT_BINDING);
+			
+		} catch (UnknownHostException | LookupFailedException | EstablishConnectionFailed e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.exit(1);
 		}
 	}
 	public void eachTime() throws IOException{
-		tosrv = new PrintWriter(new BufferedWriter(new FileWriter(f_tosrv, false)));
 		System.out.print("Admin # ");
 		String line = usr.nextLine();
 		String[] parts = line.split("\\s+");
 		if (parts[0].equalsIgnoreCase(COMMAND_SHUTDOWN)){
-			// Server-Shutdown
+			astub.shutdownServer();
+			System.out.println("Server sollte beendet sein");
+			nlu.release(astub);
+			System.exit(0);
 		} else if (parts[0].equalsIgnoreCase("exit")){
 			System.out.println("Adminshell wird beendet");
+			nlu.release(astub);
 			System.exit(0);
 		} else if (parts[0].equalsIgnoreCase(COMMAND_ADDUSER)){
-			tosrv.println(line);
+			System.out.println(astub.addUser(parts[1], parts[2]));
 		} else if (parts[0].equalsIgnoreCase(COMMAND_DELUSER)) {
-			tosrv.println(line);
+			System.out.println(astub.deleteUser(parts[1]));
 		} else if (parts[0].equalsIgnoreCase(COMMAND_SHOWUSERS)) {
-			tosrv.println(line);
+			astub.seeUsers().forEach(System.out::println);
 		} else {
 			System.err.println("Falsche Eingabe. Bitte noch einmal");
 			promptManual();
 		}
-		tosrv.close();
-		fromsrv = new BufferedReader(new FileReader(f_fromsrv));
 		try {
 			Thread.sleep(1800);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String line2;
-		while ((line2 =  fromsrv.readLine()) != null)
-			System.out.println(line2);
-		fromsrv.close();
-		tosrv = new PrintWriter(new BufferedWriter(new FileWriter(f_tosrv, false)));
-		tosrv.write("");
-		tosrv.close();
 	}
 	private void promptManual(){
 		System.out.println("Syntax:");
@@ -75,9 +78,16 @@ public class AdminShell {
 		System.out.println("----------------------------------------------------------------------------------");
 	}
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		AdminShell as = new AdminShell(ServerSideCliThread.FILE_FROM_SRV, ServerSideCliThread.FILE_TO_SRV);
+	public static void main(String[] args) {	// args[0]: Hauptport des Chatservers
+		int port;
+		try{
+			port = Integer.parseInt(args[0]);
+		} catch(Exception e){
+			port = Server.DEFAULT_PORT;
+			System.out.println("Warnung: Nutzung des Defaultports");
+		}
+		port += AdminShellStub.ADMIN_SHELL_PORT_OFFSET;
+		AdminShell as = new AdminShell(port);
 		as.promptManual();
 		while (true){
 			try {

@@ -6,11 +6,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.Map.Entry;
+import java.util.Arrays;
+import java.util.List;
 import java.util.TreeMap;
 
+import chatBase.model.Advertisement;
 import chatBase.model.ChatMessage;
 import chatBase.model.ChatMessageMessage;
-import chatBase.srvAdmin.ServerSideCliThread;
+import chatBase.srv.adm.AdminShellStubImpl;
+import de.root1.simon.Registry;
+import de.root1.simon.Simon;
 
 /**
  * Zentraler Chatserver, welcher die Einzelthreads und das Llgging verwaltet
@@ -24,8 +29,8 @@ public class Server {
 	private int port;// the port number to listen for connection
 	private boolean goOn;// the boolean that will be turned of to stop the server
 	private LoggingDaemon ld;
-	private ServerSideCliThread clithr;
 	private static Server instance;
+	private AdminShellStubImpl adshellstub;
 	public static Server getInstance(int port, PrintStream ps){
 		if (Server.instance == null){
 			Server.instance = new Server(port, ps);
@@ -39,9 +44,33 @@ public class Server {
 		this.port = port;
 		map = new TreeMap<Long,ClientThread>();
 		this.ld = new LoggingDaemon(ps);
-		this.clithr = new ServerSideCliThread();
-		this.clithr.start();
+		// Werbung starten
+		new Thread(() ->{ // Provisorium
+			try {
+				List<String> ffms = Arrays.asList("Helvetica", "Sans-serif", "Sans Serif", "Times New Roman");
+				WerbeSender ws = new WerbeSender(this.port+2);
+				ws.addAdvertisement(new Advertisement("Handytarif: CONGSTAR   Vertrag abschließen unter http://www.congstar.de/22507",
+						ffms, 16, WerbeSender.DEFAULT_UPD_INTERVAL));
+				ws.addAdvertisement(new Advertisement("privates Weekend-Bahnhofs-Shuttle mit Großraumlimosine: Fahrt ab 1,20€/Person*\n" +
+						"*Preis gilt für 6 Pers. / 1,40€ bei 5 Pers. / 1,70€ bei 4 Pers. / 2,20€ bei 3 Pers.", ffms, 14, WerbeSender.DEFAULT_UPD_INTERVAL));
+				ws.addAdvertisement(new Advertisement("Spenden Sie für dieses Projekt oder für die Stiftung \"mehr Geld für mich\"\n"+
+						"Barzahlung, Überweisung, Paypal akzeptiert.", ffms, 14, WerbeSender.DEFAULT_UPD_INTERVAL));
+			} catch (Exception e) {return;}
+		}).start();
 //		maxId = 0;
+		// CLI-Thread starten
+		new Thread(()->{
+			adshellstub = new AdminShellStubImpl(instance);
+			try {
+				Registry reg = Simon.createRegistry(port+AdminShellStubImpl.ADMIN_SHELL_PORT_OFFSET);
+				reg.bind(AdminShellStubImpl.DEFAULT_BINDING, adshellstub);
+				logMessage("AdminShell kann gestartet werden");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				logStackTrace(e);
+				logMessage("Adminshell nicht anbindbar");
+			}
+		}).start();
 	}
 	/**
 	 * Zentraler Durchlauf: je neuem Client wird ein neuer Thread eröffnet
@@ -69,11 +98,13 @@ public class Server {
 					dd.getValue().getSocket().close();
 				} catch(Exception exc) {
 					logStackTrace(exc);
-				}
+				} 
 			}
 		}
 		catch (IOException e) {
             logStackTrace(e);
+		} finally{
+			System.exit(0);
 		}
 	}		
     /**
@@ -98,12 +129,6 @@ public class Server {
 	 */
 	public void stop() {
 		goOn = false;
-		try {
-			new Socket("localhost", port);
-		}
-		catch(Exception e) {
-			logStackTrace(e);
-		}
 	}
 	/**
 	 * Eine als String-Objekt vorhandene Nachricht an alle verbundenen Clients als normale
