@@ -114,14 +114,16 @@ public class ClientController  {
 			
 	}
 	
-	  List<String> readSmallTextFile(String aFileName) throws IOException {
+	  static List<String> readSmallTextFile(String aFileName) throws IOException {
 		    Path path = Paths.get(aFileName);
+		    //System.out.println("readtf");
 		    return Files.readAllLines(path, StandardCharsets.UTF_8);
 	  }
 		  
-	  void writeSmallTextFile(List<String> aLines, String aFileName) throws IOException {
+	  static void writeSmallTextFile(List<String> aLines, String aFileName) throws IOException {
 	    Path path = Paths.get(aFileName);
 	    Files.write(path, aLines, StandardCharsets.UTF_8);
+	    //System.out.println("writetf");
 	  }
 
 	// Listen-Thread-Klasse, die auf Messages vom Server wartet und an Gui weitergibt

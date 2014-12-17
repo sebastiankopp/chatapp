@@ -28,27 +28,35 @@ public class ClientGuiControllerActionListeners {
 	actionListenerEinstellungenSichern = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			File file =new File("config.cfg");
+			//System.out.println("newFile");
 			 
     	    //if file doesnt exists, then create it
     	    if(!file.exists()){
     	    	try {
 					file.createNewFile();
+					//System.out.println("try");
 				} catch (IOException e) {
 					// do nothing
 					e.printStackTrace();
+					//System.out.println("catch");
 				}
     	    }
+    	    //System.out.println("afterfirsttry");
     	    
+    	    
+    	    List<String> aLines = new ArrayList<String>();
     	    try {
-        	    List<String> aLines = new ArrayList<String>();
         	    aLines.add(gui.editClientNickname.getText().trim());
         	    aLines.add(gui.editServerIP.getText().trim());
         	    aLines.add(gui.editServerPort.getText().trim());
 				gui.client.writeSmallTextFile(aLines, "config.cfg");
-			} catch (IOException e) {
+				//System.out.println("try2");
+			} catch (Exception e) {
 				// do nothing
 				e.printStackTrace();
+				//System.out.println("catch2");
 			};
+			//System.out.println("aftersectry");
 			
 		}
 	};
@@ -56,29 +64,35 @@ public class ClientGuiControllerActionListeners {
 	actionListenerEinstellungenLaden = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			File file =new File("config.cfg");
+			//System.out.println("newFile");
 			 
     	    //if file doesnt exists, then create it
     	    if(!file.exists()){
     	    	try {
 					file.createNewFile();
+					//System.out.println("try");
 				} catch (IOException e) {
 					// do nothing
 					e.printStackTrace();
+					//System.out.println("catch");
 				}
     	    }
+    	    //System.out.println("afterfirsttry");
     	    
     	    List<String> aLines = new ArrayList<String>();
     	    
     	    try {
-				aLines = (List<String>) gui.client.readSmallTextFile("config.cfg");
+				aLines = (List<String>) ClientController.readSmallTextFile("config.cfg");
 				gui.editClientNickname.setText(aLines.get(0));
 				gui.editServerIP.setText(aLines.get(1));
 				gui.editServerPort.setText(aLines.get(2));
-				
-			} catch (IOException e) {
+				//System.out.println("try2");
+			} catch (Exception e) {
 				// do nothing
 				e.printStackTrace();
+				//System.out.println("catch2");
 			};
+			//System.out.println("aftersectry");
 			
 		}
 	};
