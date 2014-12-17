@@ -11,6 +11,7 @@ import java.io.*;
 import chatBase.model.ChatMessage;
 import chatBase.model.ChatMessageMessage;
 import chatBase.model.ChatMessageWhoisin;
+import chatBase.model.LoginMessage;
 
 
 public class ClientController  {
@@ -21,14 +22,15 @@ public class ClientController  {
 	private Socket socket;
 
 	private ClientGuiViewSwing cgv;
-	private String server, username;
+	private String server, username, password;
 	private int port;
 
 
-	ClientController(String server, int port, String username, ClientGuiViewSwing cg) {
+	ClientController(String server, int port, String username, String password, ClientGuiViewSwing cg) {
 		this.server = server;
 		this.port = port;
 		this.username = username;
+		this.password = password;
 		this.cgv = cg;
 	}
 	
@@ -65,7 +67,7 @@ public class ClientController  {
 		// sende username zu server. ist ein String, danach wird ChatMessage verwendet
 		try
 		{
-			sOutput.writeObject(username);
+			sOutput.writeObject(new LoginMessage(username, password));
 		}
 		catch (IOException eIO) {
 			display("Exception doing login : " + eIO);

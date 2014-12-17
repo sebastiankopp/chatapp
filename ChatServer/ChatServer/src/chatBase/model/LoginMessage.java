@@ -8,6 +8,7 @@ public class LoginMessage implements java.io.Serializable {
 	private static final long serialVersionUID = 3588637256642374790L;
 	private String username, password;
 	public LoginMessage(){}
+	
 	public LoginMessage(String uname, String pw){
 		this.username = uname;
 		this.password = pw;

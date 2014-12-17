@@ -49,7 +49,7 @@ public class ClientGuiControllerActionListeners {
         	    aLines.add(gui.editClientNickname.getText().trim());
         	    aLines.add(gui.editServerIP.getText().trim());
         	    aLines.add(gui.editServerPort.getText().trim());
-				gui.client.writeSmallTextFile(aLines, "config.cfg");
+				ClientController.writeSmallTextFile(aLines, "config.cfg");
 				//System.out.println("try2");
 			} catch (Exception e) {
 				// do nothing
@@ -100,6 +100,7 @@ public class ClientGuiControllerActionListeners {
 	actionListenerButtonLogin = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			String nickname = gui.editClientNickname.getText().trim();
+			String password = new String (gui.passwordEditClientPassword.getPassword());
 			String serverIP = gui.editServerIP.getText().trim();
 			String serverPort = gui.editServerPort.getText().trim();
 			int intServerPort = 1500; //standard
@@ -111,7 +112,7 @@ public class ClientGuiControllerActionListeners {
 			}
 
 			//genug Infos hierfür:
-			gui.client = new ClientController(serverIP, intServerPort, nickname, gui);
+			gui.client = new ClientController(serverIP, intServerPort, nickname, password, gui);
 			gui.adCli.startAdv(serverIP, (intServerPort+2));
 
 			if(gui.client.start()) {

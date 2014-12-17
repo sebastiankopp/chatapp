@@ -15,6 +15,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
@@ -38,6 +39,7 @@ class ClientGuiViewSwing {
 	protected JTextField editServerIP = new JTextField();
 	protected JTextField editServerPort = new JTextField();
 	protected JTextField editClientNickname = new JTextField();
+	protected JPasswordField passwordEditClientPassword = new JPasswordField();
 	
 	// Login
 	protected JButton buttonLogin = new JButton("Anmeldung am Server");
@@ -119,7 +121,7 @@ class ClientGuiViewSwing {
 		 
 		 JPanel panelEinstellungen = new JPanel();
 		 panelEinstellungen.setLayout(new BoxLayout(panelEinstellungen, BoxLayout.Y_AXIS));
-		 setFixSizeOfComponent(panelEinstellungen, 196, 160);
+		 setFixSizeOfComponent(panelEinstellungen, 196, 160+35);
 		 
 		 
 		 panelEinstellungen.add(new JLabel("Server IP:"));
@@ -128,6 +130,8 @@ class ClientGuiViewSwing {
 		 panelEinstellungen.add(editServerPort);
 		 panelEinstellungen.add(new JLabel("Client Nickname:"));
 		 panelEinstellungen.add(editClientNickname);
+		 panelEinstellungen.add(new JLabel("Client Passwort:"));
+		 panelEinstellungen.add(passwordEditClientPassword);
 		 panelEinstellungen.add(Box.createRigidArea(new Dimension(0,2))); //bisl Abstand
 		 panelEinstellungen.add(buttonLogin);
 		 buttonLogin.addActionListener(clientguiAL.actionListenerButtonLogin);
@@ -141,7 +145,7 @@ class ClientGuiViewSwing {
 		 
 		 JPanel panelKontakte = new JPanel();
 		 panelKontakte.setLayout(new BoxLayout(panelKontakte, BoxLayout.Y_AXIS));
-		 setFixSizeOfComponent(panelKontakte, 196, 196);
+		 setFixSizeOfComponent(panelKontakte, 196, 196-35);
 		 panelKontakte.add(new JLabel("gerade online:"));
 		 panelKontakte.add(new JScrollPane(listKontakte));
 		 //setFixSizeOfComponent(listKontakte, 194, 194);
