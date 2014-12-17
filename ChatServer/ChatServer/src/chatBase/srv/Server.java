@@ -10,6 +10,7 @@ import java.util.TreeMap;
 
 import chatBase.model.ChatMessage;
 import chatBase.model.ChatMessageMessage;
+import chatBase.srvAdmin.ServerSideCliThread;
 
 /**
  * Zentraler Chatserver, welcher die Einzelthreads und das Llgging verwaltet
@@ -23,6 +24,7 @@ public class Server {
 	private int port;// the port number to listen for connection
 	private boolean goOn;// the boolean that will be turned of to stop the server
 	private LoggingDaemon ld;
+	private ServerSideCliThread clithr;
 	private static Server instance;
 	public static Server getInstance(int port, PrintStream ps){
 		if (Server.instance == null){
@@ -37,6 +39,8 @@ public class Server {
 		this.port = port;
 		map = new TreeMap<Long,ClientThread>();
 		this.ld = new LoggingDaemon(ps);
+		this.clithr = new ServerSideCliThread();
+		this.clithr.start();
 //		maxId = 0;
 	}
 	/**

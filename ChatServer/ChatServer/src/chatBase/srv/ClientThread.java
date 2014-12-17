@@ -6,9 +6,11 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
+
 import chatBase.model.ChatMessage;
 import chatBase.model.ChatMessageMessage;
 import chatBase.model.ChatMessageWhoisin;
+import chatBase.model.LoginMessage;
 import chatBase.model.PWChangeRequest;
 import chatBase.model.PWChangeResponse;
 
@@ -39,7 +41,10 @@ class ClientThread extends Thread {
 			// zuerst Output-Socket
 			setsOutput(new ObjectOutputStream(socket.getOutputStream()));
 			setsInput(new ObjectInputStream(socket.getInputStream()));
-			setUsername((String) getsInput().readObject());		// TODO statt Usernamen hier künftig Login-Message empfangen
+			LoginMessage lmsg = (LoginMessage) getsInput().readObject();
+			setUsername(lmsg.getUsername());
+			if (!dba.verifyUsr(username, lmsg.getPassword())) close();
+			
 			server.logMessage( getUsername() + " just connected.");
 		}
 		catch (IOException e) {

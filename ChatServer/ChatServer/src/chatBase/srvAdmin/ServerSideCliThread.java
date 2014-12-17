@@ -34,9 +34,6 @@ public class ServerSideCliThread extends Thread {
 					lines.add(line);
 				}
 				br.close();
-				FileWriter fr2 = new FileWriter(in);
-				fr2.write(' ');
-				fr2.close();
 				for (String line2: lines){
 					String ret = processStatement(line2);
 					pw.println(ret);

@@ -77,7 +77,7 @@ public class AdminShell {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		AdminShell as = new AdminShell("foo.txt", "bar.txt");
+		AdminShell as = new AdminShell(ServerSideCliThread.FILE_FROM_SRV, ServerSideCliThread.FILE_TO_SRV);
 		as.promptManual();
 		while (true){
 			try {
