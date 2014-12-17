@@ -21,6 +21,9 @@ class SimonWerbeServerImpl implements SimonWerbeServerInterface {
 		this.ads = ws.getAds();
 	}
 	@Override
+	/**
+	 * Schickt auf Abruf eine zufällig aus der Übersicht der Werbenachrichten ausgewählte Meldung
+	 */
 	public String createAd() {
 		int valx = (int) (ads.size() * Math.random());
 		Advertisement adx = ads.get(valx);

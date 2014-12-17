@@ -11,8 +11,10 @@ import java.util.TreeMap;
 import chatBase.model.ChatMessage;
 import chatBase.model.ChatMessageMessage;
 
-/*
- * The server that can be run both as a console application or a GUI
+/**
+ * Zentraler Chatserver, welcher die Einzelthreads und das Llgging verwaltet
+ * @author Sebastian
+ *
  */
 public class Server {
 	public static final int DEFAULT_PORT = 1500;
@@ -36,7 +38,10 @@ public class Server {
 		map = new TreeMap<Long,ClientThread>();
 		this.ld = new LoggingDaemon(ps);
 //		maxId = 0;
-	}	
+	}
+	/**
+	 * Zentraler Durchlauf: je neuem Client wird ein neuer Thread eröffnet
+	 */
 	public void doRun() {
 		goOn = true;
 		/* create socket server and wait for connection requests */
@@ -67,20 +72,28 @@ public class Server {
             logStackTrace(e);
 		}
 	}		
-    /*
-     * For the GUI to stop the server
+    /**
+     * Loggt den Stacktrace eines Throwable-Objektes mit Zeitstempel in den im LoggingDaemon referenzierten
+     * PrintStream
+     * @param thr Zu protokollierendes Throwable-Objekt
      */
 	public void logStackTrace(Throwable thr){
 		ld.getPw().println(LocalDateTime.now() + ":" + thr.getMessage());
 		thr.printStackTrace(ld.getPw());
 	}
+	/**
+	 * Loggt eine allg. Lognachricht mit Zeitstempel in den im LoggingDaemon referenzierten
+     * PrintStream
+	 * @param msg Zu protokollierende Meldung (ohne Zeitstempel (der wird generiert))
+	 */
 	public void logMessage(String msg){
 		ld.getPw().println(LocalDateTime.now().toString() + ": " + msg);
 	}
+	/**
+	 * Stoppt den Server
+	 */
 	public void stop() {
 		goOn = false;
-		// connect to myself as Client to exit statement 
-		// Socket socket = serverSocket.accept();
 		try {
 			new Socket("localhost", port);
 		}
@@ -88,14 +101,15 @@ public class Server {
 			logStackTrace(e);
 		}
 	}
-	/*
-	 *  to broadcast a message to all Clients
+	/**
+	 * Eine als String-Objekt vorhandene Nachricht an alle verbundenen Clients als normale
+	 * Chat-Nachricht versenden
+	 * Sollte das Senden bei einem Client nicht funktionieren, wird seine Verbindung getrennt
+	 * @param message 
 	 */
 	synchronized void sendToAll(String message) {
 		String messageWithDT;
-		ld.getPw().println(messageWithDT = "\n"+LocalDateTime.now().toString() + " " + message);// log message for server
-		// we loop in reverse order in case we would have to remove a Client
-		// because it has disconnected
+		ld.getPw().println(messageWithDT = "\n"+LocalDateTime.now().toString() + " " + message);
 		map.forEach((Long ii, ClientThread dd) ->{
 			ChatMessageMessage msgx = new ChatMessageMessage(ChatMessage.MESSAGE, messageWithDT);
 			boolean rc= dd.writeMsg(msgx);
@@ -106,7 +120,10 @@ public class Server {
 			}
 		});
 	}
-	// for a client who logoff using the LOGOUT message
+	/**
+	 * Einen Client entfernen und die aktualisierte Liste aller verbundenen User an ihre Clients senden
+	 * @param id Session-Key in der Map
+	 */
 	synchronized void remove(long id) {
 		// scan the array list until we found the Id
 		map.remove(id);

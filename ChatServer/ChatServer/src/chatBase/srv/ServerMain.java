@@ -12,6 +12,10 @@ import chatBase.model.Advertisement;
  */
 public class ServerMain {
 	private static int portNumber;
+	/**
+	 * Mainmethode des Servers: Schickt provisorisch noch vordefinierte Werbemeldungen
+	 * @param args
+	 */
 	public static void main(String[] args){
 		portNumber = Server.DEFAULT_PORT;
 		portNumber = Integer.parseInt(JOptionPane.showInputDialog("Please enter a port number"));

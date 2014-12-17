@@ -12,19 +12,23 @@ import chatBase.model.ChatMessageWhoisin;
 import chatBase.model.PWChangeRequest;
 import chatBase.model.PWChangeResponse;
 
-/** One instance of this thread will run for each client */
+/**
+ * Thread, der für die Bedienung eines Clients verantwortlich ist
+ * @author Sebastian Kopp
+ *
+ */
 class ClientThread extends Thread {
 	/**
 	 * 
 	 */
 	private Server srv;
-	private Socket socket;// the socket where to listen/talk
+	private Socket socket; // Socket
 	private ObjectInputStream ois;
 	private ObjectOutputStream oos;
 	private long id; 
 	private String username;
 	private DBAdapter dba;
-	private ChatMessage cm; // received msg
+	private ChatMessage cm; // Empfangene Nachricht
 	public ClientThread(Server server, Socket socket, long id) {
 		this.srv = server;
 		this.dba = DBAdapter.getInstance();
@@ -45,7 +49,10 @@ class ClientThread extends Thread {
 		catch (ClassNotFoundException e) {}
 	}
 
-	// what will run forever
+	/**
+	 * Hauptdurchlauf des Client-Threads, im Wesentlichen Fallunterscheidung
+	 * der eintreffenden Nachrichtentypen
+	 */
 	public void run() {
 		// to loop until LOGOUT
 		boolean keepGoing = true;
@@ -85,13 +92,18 @@ class ClientThread extends Thread {
 		this.srv.remove(id);
 		close();
 	}
+	/**
+	 * Liste erstellen und senden, die alle anwesenden Nutzer anzeigt
+	 */
 	void writeWhoIsIn(){
 		List<String> wholist = new LinkedList<String>();
 		srv.map.forEach((Long ii, ClientThread dd) ->  wholist.add(dd.getUsername()));
 		ChatMessageWhoisin wiimsg = new ChatMessageWhoisin(ChatMessage.WHOISIN, wholist);
 		writeMsg(wiimsg);
 	}
-	
+	/**
+	 * Sockets dichtmachen
+	 */
 	private void close() {
 		try {
 			if(getsOutput() != null) getsOutput().close();
