@@ -6,5 +6,6 @@
 	<classpathentry kind="lib" path="gson-2.3.1.jar"/>
 	<classpathentry kind="lib" path="h2-1.4.181.jar"/>
 	<classpathentry kind="lib" path="simon-1.1.4-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="jdom-2.0.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
