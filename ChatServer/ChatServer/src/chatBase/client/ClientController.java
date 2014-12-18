@@ -63,8 +63,7 @@ public class ClientController  {
 
 		// erzeuge ListenThread
 		new ListenFromServer().start();
-		//TODO Login in ChatMessage integrieren
-		// sende username zu server. ist ein String, danach wird ChatMessage verwendet
+
 		try
 		{
 			sOutput.writeObject(new LoginMessage(username, password));
@@ -83,7 +82,7 @@ public class ClientController  {
 	 * To send to GUI
 	 */
 	private void display(String msg) {
-			cgv.appendMemoVerlauf(msg + "\n");		// append zu ClientGUIView JTextArea
+			cgv.appendMemoVerlauf("\n" + msg + "\n");		// append zu ClientGUIView JTextArea
 	}
 	
 	// sende message zu server

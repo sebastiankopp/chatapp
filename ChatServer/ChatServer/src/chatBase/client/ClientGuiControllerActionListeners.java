@@ -126,7 +126,8 @@ public class ClientGuiControllerActionListeners {
 
 			gui.editServerIP.setEditable(false);
 			gui.editServerPort.setEditable(false);
-			gui.editClientNickname.setEditable(false);}
+			gui.editClientNickname.setEditable(false);
+			gui.passwordEditClientPassword.setEditable(false);}
 		}
 	}; 
 	
@@ -145,14 +146,11 @@ public class ClientGuiControllerActionListeners {
 		public void actionPerformed(ActionEvent e) {	
 			gui.client.sendMessage(new ChatMessage(ChatMessage.LOGOUT));
 			
-			gui.buttonLogin.setEnabled(true);
-			gui.buttonLogout.setEnabled(false);
-
-			gui.editServerIP.setEditable(true);
-			gui.editServerPort.setEditable(true);
-			gui.editClientNickname.setEditable(true);
+			gui.deleteObjects();
 			
-			gui.adCli.stopAdv();
+			gui.resetGuiOptions();
+			
+			gui.createObjects();
 		}
 	}; 
 	

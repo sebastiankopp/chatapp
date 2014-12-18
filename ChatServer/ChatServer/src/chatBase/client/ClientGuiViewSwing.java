@@ -225,25 +225,53 @@ class ClientGuiViewSwing {
 		memoVerlauf.setCaretPosition(memoVerlauf.getText().length() - 1);
 	}
 	
-	protected void verbindungsfehler() {
+	protected void deleteObjects(){
+		// reset everything
+				client=null;
+				adCli.stopAdv();
+				adCli=null;
+				clientguiAL=null;
+	}
+	
+	protected void createObjects(){
+		System.gc(); //clear old objects
+		clientguiAL = new ClientGuiControllerActionListeners(this);
+		adCli = new AdClientController(memoWerbung);
+	}
+	
+	protected void resetGuiOptions(){
 		buttonLogin.setEnabled(true);
 		buttonLogout.setEnabled(false);
-		setStandard();
-		editServerIP.setEditable(true); //sab
-		editServerPort.setEditable(true);	//sab
+		editServerIP.setEditable(true);
+		editServerPort.setEditable(true);	
+		editClientNickname.setEditable(true);
+		passwordEditClientPassword.setEditable(true);
+		
+		listKontakte.setListData(new String[0]);
 		
 		//for (ActionListener al : buttonSenden.getActionListeners()){
 		//	buttonSenden.removeActionListener(al);
-		//}  //sab nicht nötig, über istverbunden geregelt
+		//}  // nicht nötig, über istverbunden geregelt
 		
 		istVerbunden = false;
 	}
 	
+	protected void verbindungsfehler() {
+		deleteObjects();
+		
+		setStandard();
+		
+		resetGuiOptions();
+		
+		createObjects();
+	}
+	
 	private void setStandard(){
-		// später durch autoload von einstellungen ersetzen (Feature 3)
+		// Standard nach createFrame und verbindungsfehler
 		editServerIP.setText("127.0.0.1");
 		editServerPort.setText("1500");
 		editClientNickname.setText("Unbekannt");
+		passwordEditClientPassword.setText("");
 	}
 
 }
