@@ -6,11 +6,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.Map.Entry;
-import java.util.Arrays;
-import java.util.List;
 import java.util.TreeMap;
 
-import chatBase.model.Advertisement;
 import chatBase.model.ChatMessage;
 import chatBase.model.ChatMessageMessage;
 import chatBase.srv.adm.AdminShellStubImpl;
@@ -57,7 +54,6 @@ public class Server {
 				reg.bind(AdminShellStubImpl.DEFAULT_BINDING, adshellstub);
 				logMessage("AdminShell kann gestartet werden");
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				logStackTrace(e);
 				logMessage("Adminshell nicht anbindbar");
 			}
@@ -72,7 +68,7 @@ public class Server {
 		try{
 			ServerSocket serverSocket = new ServerSocket(port);
 			while(goOn) {
-				logMessage("Server waiting for Clients on port " + port + ".");
+				logMessage("Server ist bereit: Portnummer: " + port);
 				Socket socket = serverSocket.accept();  	// accept connection
 				long clntThrId = System.currentTimeMillis();
 				if (!goOn) break;
@@ -135,7 +131,7 @@ public class Server {
 			boolean rc= dd.writeMsg(msgx);
 			if (!rc){
 				map.remove(ii);
-				logMessage("Client " + dd.getUsername() + " was disconnected and removed from the list.");
+				logMessage("Die Verbindung des Clients " + dd.getUsername() + " wurde geschlossen und entfernt.");
 				map.forEach((Long l, ClientThread cthr) -> cthr.writeWhoIsIn());
 			}
 		});
@@ -150,7 +146,6 @@ public class Server {
 		map.forEach((Long l, ClientThread cthr) -> cthr.writeWhoIsIn()); // Beim Logout allen mitteilen, wer drin ist
 	}
 	public LoggingDaemon getLd() {
-		// TODO Auto-generated method stub
 		return this.ld;
 	}
 }

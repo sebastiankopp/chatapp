@@ -7,7 +7,6 @@ import java.util.Vector;
 import java.util.stream.Collectors;
 
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 import chatBase.model.Advertisement;

@@ -1,6 +1,6 @@
 package chatBase.srv;
 
-import javax.swing.JOptionPane;
+import java.util.Scanner;
 /**
  * Hauptklasse des Servers. WerbeSchleuder wird vorerst hier instanziiert
  * @author Sebastian
@@ -14,13 +14,22 @@ public class ServerMain {
 	 */
 	public static void main(String[] args){
 		portNumber = Server.DEFAULT_PORT;
-		portNumber = Integer.parseInt(JOptionPane.showInputDialog("Please enter a port number"));
-		if (args.length > 0){
+		if (args.length == 0){
+			System.out.println("Für Standardport bitte beliebigen Buchstaben eingeben.");
+			System.out.print("Bitte Portnummer eingeben: ");
+			Scanner sc = new Scanner(System.in);
+			try {
+				portNumber = sc.nextInt();
+			} catch (Exception e) {
+				System.err.println("Portnummer ungültig, Standardport wird genutzt.");
+			}
+			sc.close();
+		} else {
 			try {
 				portNumber =Integer.parseInt(args[1]);
 			} catch (Exception e) {
-				System.err.println("Port number might be invalid");
-				System.err.println("Usage: java -cp chatapp.jar chatBase.ServerMain [portnumber]");
+				System.err.println("Portnummer ungültig, Standardport wird genutzt.");
+				System.err.println("Syntax: java -cp chatapp.jar chatBase.ServerMain [portnumber]");
 			}
 		}
 		Server srv = Server.getInstance(portNumber, System.err);

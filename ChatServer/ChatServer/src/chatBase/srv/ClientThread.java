@@ -36,7 +36,6 @@ class ClientThread extends Thread {
 		this.dba = DBAdapter.getInstance();
 		this.id = id;
 		this.setSocket(socket);
-		server.logMessage("Thread trying to create Object Input/Output Streams");
 		try {
 			// zuerst Output-Socket
 			setsOutput(new ObjectOutputStream(socket.getOutputStream()));
@@ -45,7 +44,7 @@ class ClientThread extends Thread {
 			setUsername(lmsg.getUsername());
 			if (!dba.verifyUsr(username, lmsg.getPassword())) close();
 			
-			server.logMessage( getUsername() + " just connected.");
+			server.logMessage( getUsername() + " wurde gerade verbunden.");
 		}
 		catch (IOException e) {
 			server.logStackTrace(e);
@@ -66,14 +65,14 @@ class ClientThread extends Thread {
 			try {
 				cm = (ChatMessage) getsInput().readObject();
 			} catch (IOException | ClassNotFoundException e) {
-				srv.logMessage(getUsername() + " Exception reading Streams: " + e);
+				srv.logMessage(getUsername() + ": Fehler aufgetreten: " + e.getMessage());
 				srv.logStackTrace(e);
 				break;				
 			}
 			// Unterscheidung nach Messagetyp
 			switch(cm.getType()) {
 			case ChatMessage.MESSAGE:
-				ChatMessageMessage cmm = (ChatMessageMessage) cm; //cast is OK cause type is message
+				ChatMessageMessage cmm = (ChatMessageMessage) cm;
 				String message = cmm.getMessage();
 				this.srv.sendToAll(getUsername() + ": " + message);
 				break;
@@ -139,7 +138,7 @@ class ClientThread extends Thread {
 		try {
 			getsOutput().writeObject(msg);
 		} catch(IOException e) {
-			srv.logMessage("Error sending message to " + getUsername());
+			srv.logMessage("Fehler aufgetreten, eine Nachricht an " + getUsername() +" zu senden.");
 			srv.logStackTrace(e);
 		}
 		return true;
