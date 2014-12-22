@@ -1,0 +1,9 @@
+Allgemeine Erfahrung mit Scrum
+
+Software mit Scrum zu entwickeln ist sehr angenehm, da man immer "Häppchenweise" in Sprints arbeitet.
+Außerdem ist Scrum positiv für die Motivation im Projekt, da man in den Sprint-Reviews auch auf die erfolgreich erledigte Arbeit zurück blickt.
+ABER:
+In der Praxis hat sich bei unserem Projekt gezeigt, dass die Einteilung in kleine Sprints besonders am Anfang etwas schwer ist.
+Die Sprint-Reviews sind vor allem am Anfang sehr wichtig, da hier das nicht erledigte auf die nächsten Sprints aufgeteilt wird.
+Grundsätzlich gilt: Nur weil etwas als Sprintziel formuliert wurde, muss dieses Ziel nicht erreicht werden, daher sind die Reviews bzw. der Scrum Master sehr wichtig.
+Das wichtigste ist: Erreichbare Ziele festlegen und bei Projektbeginn noch nicht an Quellcode denken. Dies behindert die Sprintplanung.
